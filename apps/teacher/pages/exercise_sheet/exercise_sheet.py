@@ -87,21 +87,24 @@ st.text("")  # Fügt eine Leerzeile hinzu
 
 if st.session_state.exercise_sheet_level == "1_text":
   one, two, three = st.columns(3)
-  one.markdown("<h3>1️⃣. <u>Lesetext</u> 📖", unsafe_allow_html=True)
-  two.markdown("<h3>2️⃣. Aufgaben", unsafe_allow_html=True)
-  three.markdown("<h3>3️⃣. Download", unsafe_allow_html=True)
+  one.markdown("<h4>1️⃣. <u>Lesetext</u> 📖", unsafe_allow_html=True)
+  two.markdown("<h4>2️⃣. Aufgaben", unsafe_allow_html=True)
+  three.markdown("<h4>3️⃣. Download", unsafe_allow_html=True)
 
 if st.session_state.exercise_sheet_level == "2_qas":
   one, two, three = st.columns(3)
-  one.markdown("<h3>1️⃣. Lesetext", unsafe_allow_html=True)
-  two.markdown("<h3>2️⃣. <u>Aufgaben</u> ⁉️", unsafe_allow_html=True)
-  three.markdown("<h3>3️⃣. Download", unsafe_allow_html=True)
+  one.markdown("<h4>1️⃣. Lesetext", unsafe_allow_html=True)
+  two.markdown("<h4>2️⃣. <u>Aufgaben</u> ⁉️", unsafe_allow_html=True)
+  three.markdown("<h4>3️⃣. Download", unsafe_allow_html=True)
 
 if st.session_state.exercise_sheet_level == "3_answers":
   one, two, three = st.columns(3)
-  one.markdown("<h3>1️⃣. Lesetext", unsafe_allow_html=True)
-  two.markdown("<h3>2️⃣. Aufgaben", unsafe_allow_html=True)
-  three.markdown("<h3>3️⃣. <u>Download</u> 💾 ", unsafe_allow_html=True)
+  one.markdown("<h4>1️⃣. Lesetext", unsafe_allow_html=True)
+  two.markdown("<h4>2️⃣. Aufgaben", unsafe_allow_html=True)
+  three.markdown("<h4>3️⃣. <u>Download</u> 💾 ", unsafe_allow_html=True)
+
+st.text("")
+
 
 if st.session_state.exercise_sheet_level == "1_text":
   st.subheader("1. Lesetext einfügen oder generieren...", divider="red", anchor=False)
@@ -113,26 +116,16 @@ if st.session_state.exercise_sheet_level == "1_text":
 
   st.text("")
 
-  container = st.container()
-  
-  with container:
-    left, right = st.columns(2, gap="large")
 
-    with left:
-      st.subheader("Möglichkeit A", divider="violet")
-      # st.write("##### Einfügen...")
-      topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68)
-      st.write("")
-      st.session_state.response = topic_text
+  left, right = st.columns(2, gap="large")
 
-    with right:
-      st.subheader("Möglichkeit B", divider="green")
-      st.write("Text generieren lassen:")
-      # st.write("##### Generieren...")
+  with left:
+    st.subheader("Möglichkeit A", divider="violet")
+    # st.write("##### Einfügen...")
+    topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68)
+    st.write("")
+    st.session_state.response = topic_text
 
-  left_below, right_below = st.columns(2, gap="large")
-
-  with left_below:
     if st.button(label="Fortfahren :material/arrow_right_alt:", key="button-blue", use_container_width=True):
       
       if st.session_state.topic == "":
@@ -149,30 +142,35 @@ if st.session_state.exercise_sheet_level == "1_text":
         st.session_state.exercise_sheet_level = "2_qas"
         show_finish_popup()
 
-  with right_below:
-    if st.button(label="Lesetext generieren :material/laps:", key="button-blue2", use_container_width=True):
-      
-      if st.session_state.topic == "":
-        st.toast("Thema fehlt :exclamation:")
-        st.error("Bitte Thema eingeben :exclamation:")
 
-      else:
-        show_generate_popup("Lesetext")
+    with right:
+      st.subheader("Möglichkeit B", divider="green")
+      st.write("Text generieren lassen:")
+      # st.write("##### Generieren...")
 
-        with st.spinner(''):
-          ai_model = "Max Creator"
-          if ai_model == "Max Creator":
-            response = generate_1_text_gpt(topic)
-          elif ai_model == "Genius AI":
-            pass
-            # response = generate_quiz_gemini(user_text, num_questions, time_limit)
-          else:
-            st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
-            
-          st.session_state.response = response
-          st.session_state.exercise_sheet_level = "2_qas"
-          # st.success("Fertig generiert 🎉🎉🎉")      
-          show_finish_popup()
+      if st.button(label="Lesetext generieren :material/laps:", key="button-blue2", use_container_width=True):
+        
+        if st.session_state.topic == "":
+          st.toast("Thema fehlt :exclamation:")
+          st.error("Bitte Thema eingeben :exclamation:")
+
+        else:
+          show_generate_popup("Lesetext")
+
+          with st.spinner(''):
+            ai_model = "Max Creator"
+            if ai_model == "Max Creator":
+              response = generate_1_text_gpt(topic)
+            elif ai_model == "Genius AI":
+              pass
+              # response = generate_quiz_gemini(user_text, num_questions, time_limit)
+            else:
+              st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
+              
+            st.session_state.response = response
+            st.session_state.exercise_sheet_level = "2_qas"
+            # st.success("Fertig generiert 🎉🎉🎉")      
+            show_finish_popup()
 
 
 
