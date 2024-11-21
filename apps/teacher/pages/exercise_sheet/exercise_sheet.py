@@ -85,6 +85,7 @@ if st.session_state.exercise_sheet_level != "1_text":
 
 st.text("")  # Fügt eine Leerzeile hinzu
 
+
 if st.session_state.exercise_sheet_level == "1_text":
   one, two, three = st.columns(3)
   one.markdown("<h4>1️⃣. <u>Lesetext</u> 📖", unsafe_allow_html=True)
