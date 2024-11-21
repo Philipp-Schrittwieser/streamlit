@@ -1,0 +1,30 @@
+example_text = """Ein Computer (englisch; deutsche Aussprache [kɔmˈpjuːtɐ]) oder Rechner ist ein Gerät, das mittels programmierbarer Rechenvorschriften Daten verarbeitet. Dementsprechend werden vereinzelt auch die abstrahierenden beziehungsweise veralteten, synonym gebrauchten Begriffe Rechenanlage, Datenverarbeitungsanlage oder elektronische Datenverarbeitungsanlage sowie Elektronengehirn verwendet.
+
+Charles Babbage und Ada Lovelace (geborene Byron) gelten durch die von Babbage 1837 entworfene Rechenmaschine Analytical Engine als Vordenker des modernen universell programmierbaren Computers. Konrad Zuse (Z3, 1941 und Z4, 1945) in Berlin, John Presper Eckert und John William Mauchly (ENIAC, 1946) bauten die ersten funktionstüchtigen Geräte dieser Art. Bei der Klassifizierung eines Geräts als universell programmierbarer Computer spielt die Turing-Vollständigkeit eine wesentliche Rolle. Sie ist benannt nach dem englischen Mathematiker Alan Turing, der 1936 das logische Modell der Turingmaschine eingeführt hatte.[1][2]
+
+Die frühen Computer wurden auch (Groß-)Rechner genannt; ihre Ein- und Ausgabe der Daten war zunächst auf Zahlen beschränkt. Zwar verstehen sich moderne Computer auf den Umgang mit weiteren Daten, beispielsweise mit Buchstaben und Tönen. Diese Daten werden jedoch innerhalb des Computers in Zahlen umgewandelt und als solche verarbeitet, weshalb ein Computer auch heute eine Rechenmaschine ist.
+
+Mit zunehmender Leistungsfähigkeit eröffneten sich neue Einsatzbereiche. Computer sind heute in allen Bereichen des täglichen Lebens vorzufinden, meistens in spezialisierten Varianten, die auf einen vorliegenden Anwendungszweck zugeschnitten sind. So dienen integrierte Kleinstcomputer (eingebettetes System) zur Steuerung von Alltagsgeräten wie Waschmaschinen und Videorekordern oder zur Münzprüfung in Warenautomaten; in modernen Automobilen dienen sie beispielsweise zur Anzeige von Fahrdaten und steuern in „Fahrassistenten“ diverse Manöver selbst.
+
+Universelle Computer finden sich in Smartphones und Spielkonsolen. Personal Computer (engl. für persönliche Computer, als Gegensatz zu von vielen genutzten Großrechnern) dienen der Informationsverarbeitung in Wirtschaft und Behörden sowie bei Privatpersonen; Supercomputer werden eingesetzt, um komplexe Vorgänge zu simulieren, z. B. in der Klimaforschung oder für medizinische Berechnungen.
+
+Rechner
+Der deutsche Begriff Rechner ist abgeleitet vom Verb rechnen. Zur Etymologie siehe Rechnen#Etymologie.
+
+Computer
+Das englische Substantiv computer ist abgeleitet von dem englischen Verb to compute. Jenes ist abgeleitet von dem lateinischen Verb computare, was zusammenrechnen bedeutet.
+
+Der englische Begriff computer war ursprünglich eine Berufsbezeichnung für Hilfskräfte, die immer wiederkehrende Berechnungen (z. B. für die Astronomie, für die Geodäsie oder für die Ballistik) im Auftrag von Mathematikern ausführten und damit Tabellen wie z. B. eine Logarithmentafel füllten. Dieser Beruf wurde vorwiegend von Frauen ausgeübt.[3]
+
+In der frühen Kirchengeschichte erfolgte eine Ablösung des jüdischen Kalenders durch den Julianischen Kalender. Die hieraus resultierenden Berechnungsschwierigkeiten des Osterdatums dauerten bis zum Mittelalter an und waren Gegenstand zahlreicher Publikationen, häufig betitelt mit Computus Ecclesiasticus. Doch finden sich noch weitere Titel, z. B. von Sigismund Suevus 1574, die sich mit arithmetischen Fragestellungen auseinandersetzen. Der früheste Text, in dem das Wort Computer isoliert verwendet wird, stammt von 1613.[4] Der englische Autor Richard Brathwaite schrieb:
+
+“What art thou (O Man) and from whence hadst thou thy beginning? What matter art thou made of, that thou promisest to thy selfe length of daies: or to thy posterity continuance. I have read the truest computer of Times, and the best Arithmetician that ever breathed, an he reduceth thy dayes into a short number: The daies of Man are threescore and ten.”
+
+„Was bist du (O Mensch) und woher stammst du? Woraus bist du gemacht, dass du dir selbst versprichst, lange Tage zu leben: oder deinen Nachkommen Fortbestand. Ich habe den wahren Computer aller Zeiten gelesen, und die besten Arithmetiker die jemals atmeten, und er reduzierte deine Tage zu einer kleinen Zahl: Die Lebenszeit des Menschen sind siebzig [Jahre]“
+
+– Richard Brathwaite, „The Yong Mans Gleanings“, 1613[5]
+Die Bedeutung und der Kontext des Textes sind nicht eindeutig und lassen mehrere Interpretationen zu. Mit computer ist wohl ein sehr intelligenter Mann gemeint, allerdings kann im Mittelalter nur Gott die Lebenszeit des Menschen beeinflussen, so dass im zweiten Teil des Zitats auch Gott handeln könnte. The daies of Man are threescore and ten ist ein Zitat aus Psalm 90,10 KJV, der in der Einheitsübersetzung mit „Der ewige Gott – der vergängliche Mensch“ überschrieben ist.[5]
+
+In der Zeitung The New York Times tauchte das Wort erstmals am 2. Mai 1892 in einer Kleinanzeige der United States Navy mit dem Titel A Computer Wanted ‚Ein Rechner gesucht‘ auf, in der Kenntnisse in Algebra, Geometrie, Trigonometrie und Astronomie vorausgesetzt worden sind.[6]
+
+An der University of Pennsylvania in Philadelphia wurden im Auftrag der United States Army ballistische Tabellen berechnet. Das Ergebnis waren Bücher für die Artillerie, die für unterschiedliche Geschütze Flugbahnen unterschiedlicher Geschosse vorhersagten. Diese Berechnungen erfolgten größtenteils von Hand. Die einzige Hilfe war eine Tabelliermaschine, die zu multiplizieren und zu dividieren vermochte. Die Angestellten, die dort rechneten, wurden „computer“ (im Sinne eines menschlichen Computers) genannt.[7][8] Erstmals wurde der Begriff 1946 bei der dort entwickelten elektronischen Rechenanlage Electronic Numerical Integrator and Computer (ENIAC) für ein technisches Gerät verwendet. Seit 1962 ist der Begriff in Deutschland belegt.[9]"""

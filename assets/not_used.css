@@ -1,0 +1,79 @@
+#MainMenu {visibility: hidden;}
+
+footer {visibility: hidden;}
+
+#stDecoration {display: none;}
+
+.stAppToolbar {display: none;}
+
+.stButton:focus {color: white !important; }
+
+
+.c-h1 {
+  font-size: 2.8rem; 
+  font-weight: 600;
+  text-align: left;
+  /* hilft nicht
+  padding: 0;
+  margin: 0; */
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .c-h1 {
+    font-size: 2rem;  /* 36px */
+  }
+}
+
+/* Smartphone */
+@media (max-width: 480px) {
+  .c-h1 {
+    font-size: 1.5rem;  /* 24px */
+  }
+}
+
+/* if tw.button("Fragen generieren", classes="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 hover:text-white focus:bg-white border-none", key="generate"): */
+
+
+/*  st-key-<keyname>
+    key = green
+    st-key-green */
+
+/* [class*="st-key-button-blue"] button {
+  background-color: #60a5fa;
+  color: white;
+  border: none;
+}
+
+[class*="st-key-button-blue"] button:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+[class*="st-key-button-blue"] button:active {
+  background-color: #93c5fd;
+}
+
+[class*="st-key-button-blue"] button:focus p {
+  color: white; 
+} */
+
+
+button[data-testid="stBaseButton-secondary"] {
+  background-color: #60a5fa;
+  color: white;
+}
+
+button[data-testid="stBaseButton-secondary"]:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+button[data-testid="stBaseButton-secondary"]:active {
+  background-color: #93c5fd;
+}
+
+button[data-testid="stBaseButton-secondary"]:focus p {
+  color: white; 
+}       
+
