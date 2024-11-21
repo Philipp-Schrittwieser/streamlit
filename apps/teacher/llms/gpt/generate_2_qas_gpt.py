@@ -5,6 +5,7 @@ import streamlit as st
 
 openai_api_key = st.secrets.OPENAI_API_KEY
 
+
 class QuestionAnswerPair(BaseModel):
     question_answer_pair_number: int
     question: str
