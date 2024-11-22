@@ -32,6 +32,8 @@ if st.session_state.login_state in ["logging-in", "wrong-pw"]:
         key="password_input"
     )
 
+    st.write("*Diese App ist für die Nutzung am Computer optimiert. 💻 📴")
+
 
 # 3. Fehlerbehandlung für falsches Passwort
 if st.session_state.login_state == "wrong-pw":

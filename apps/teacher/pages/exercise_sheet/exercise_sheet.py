@@ -109,10 +109,12 @@ st.text("")
 
 if st.session_state.exercise_sheet_level == "1_text":
   st.subheader("1. Lesetext einfügen oder generieren...", divider="red", anchor=False)
+  st.write("Möchtest du einen Text einfügen, aus dem wir dein Arbeitsblatt erstellen (Möglichkeit A) oder sollen wir einen neuen Text für dich generieren (Möglichkeit B)?")
+  st.write("Tippen dein Thema unterhalb ein und dann wähle Option A oder B.")
 
   st.text("")
 
-  topic = st.text_input("Thema eintippen", placeholder="z.B. Klimawandel")
+  topic = st.text_input("Thema eintippen:", placeholder="z.B. Klimawandel")
   st.session_state.topic = topic
 
   st.text("")
@@ -178,6 +180,8 @@ if st.session_state.exercise_sheet_level == "1_text":
 elif st.session_state.exercise_sheet_level == "2_qas":
   st.subheader("2. Aufgaben und Lösungen erstellen...", divider="violet", anchor=False)
 
+  st.write("Dein Lesetext ist im Dropdown-Menü verfügbar. Klicke jetzt auf den Button darunter, um Aufgaben und Lösungen zu deinem Text zu erstellen.")
+
   with st.expander("Lesetext hier ansehen"):
     st.write(st.session_state.response)
   
@@ -201,6 +205,8 @@ elif st.session_state.exercise_sheet_level == "2_qas":
 
 elif st.session_state.exercise_sheet_level == "3_answers":
   st.subheader("3. Alle Unterlagen herunterladen...", divider="green", anchor=False)
+
+  st.write("Hier kannst du noch einmal alle Dokumente einsehen und wenn du zufrieden bist einfach herunterladen.")
 
   with st.expander("Generierter Lesetext"):
     st.write(st.session_state.response)
