@@ -120,7 +120,7 @@ st.text("")
 
 
 if st.session_state.exercise_sheet_level == "1_text":
-  st.subheader("1. Lesetext einfügen oder generieren...", divider="red", anchor=False)
+  st.subheader("1. Lesetext einfügen oder generieren...", divider="blue", anchor=False)
   st.write("Möchtest du einen Text einfügen, aus dem dein Arbeitsblatt erstellt wird (Möglichkeit A) oder soll ein komplett neuer Text für dich generiert werden (Möglichkeit B)?")
   st.write("Tippe dein Thema unterhalb ein und dann wähle Option A oder B.")
 
@@ -135,7 +135,7 @@ if st.session_state.exercise_sheet_level == "1_text":
   left, right = st.columns(2, gap="large")
 
   with left:
-    st.subheader("Möglichkeit A", divider="violet", anchor=False)
+    st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
     # st.write("##### Einfügen...")
     topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68)
     st.write("")
@@ -159,7 +159,7 @@ if st.session_state.exercise_sheet_level == "1_text":
 
 
     with right:
-      st.subheader("Möglichkeit B", divider="green", anchor=False)
+      st.subheader("Option B: Text generieren", divider="green", anchor=False)
       st.write("Text generieren lassen:")
       # st.write("##### Generieren...")
 
