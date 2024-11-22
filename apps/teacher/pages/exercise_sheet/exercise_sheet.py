@@ -21,6 +21,15 @@ def show_finish_popup():
   time.sleep(0.75)
   st.rerun()
 
+def show_download_popup(type):
+  st.toast(f"{type} wurde heruntergeladen ✅ ")
+  time.sleep(1)
+  st.toast("Du kannst es dir rechts oben im Browser ansehen! 🌎")
+
+def show_restart_popup():
+  st.toast("App wird neu gestartet... 🏁")
+  time.sleep(0.5)
+
 def add_formatted_text(doc, text):
     lines = text.split('\n')
     current_paragraph = None
@@ -64,6 +73,15 @@ def add_formatted_run(paragraph, text):
         if i % 2 == 1:  # Ungerade Indizes sind fett gedruckt
             run.bold = True
 
+def restart_arbeitsblatt():
+  st.session_state.exercise_sheet_level = "1_text"
+  st.session_state.topic = ""
+  st.session_state.response = ""
+  st.session_state.qas = []
+  st.session_state.fragen = ""
+  st.session_state.lösungen = ""
+  st.rerun()
+
 if "exercise_sheet_level" not in st.session_state:
   st.session_state.exercise_sheet_level = "1_text"
 
@@ -73,15 +91,9 @@ if "response" not in st.session_state:
 left, right = st.columns([15, 1], gap="small", vertical_alignment="center")
 left.title("Arbeitsblatt Generator 📝", anchor=False)
 
-if st.session_state.exercise_sheet_level != "1_text":
+if st.session_state.exercise_sheet_level == "2_qas":
   if right.button(":material/restart_alt:", use_container_width=False):
-    st.session_state.exercise_sheet_level = "1_text"
-    st.session_state.topic = ""
-    st.session_state.response = ""
-    st.session_state.qas = []
-    st.session_state.fragen = ""
-    st.session_state.lösungen = ""
-    st.rerun()
+    restart_arbeitsblatt()
 
 st.text("")  # Fügt eine Leerzeile hinzu
 
@@ -109,8 +121,8 @@ st.text("")
 
 if st.session_state.exercise_sheet_level == "1_text":
   st.subheader("1. Lesetext einfügen oder generieren...", divider="red", anchor=False)
-  st.write("Möchtest du einen Text einfügen, aus dem wir dein Arbeitsblatt erstellen (Möglichkeit A) oder sollen wir einen neuen Text für dich generieren (Möglichkeit B)?")
-  st.write("Tippen dein Thema unterhalb ein und dann wähle Option A oder B.")
+  st.write("Möchtest du einen Text einfügen, aus dem dein Arbeitsblatt erstellt wird (Möglichkeit A) oder soll ein komplett neuer Text für dich generiert werden (Möglichkeit B)?")
+  st.write("Tippe dein Thema unterhalb ein und dann wähle Option A oder B.")
 
   st.text("")
 
@@ -123,7 +135,7 @@ if st.session_state.exercise_sheet_level == "1_text":
   left, right = st.columns(2, gap="large")
 
   with left:
-    st.subheader("Möglichkeit A", divider="violet")
+    st.subheader("Möglichkeit A", divider="violet", anchor=False)
     # st.write("##### Einfügen...")
     topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68)
     st.write("")
@@ -147,7 +159,7 @@ if st.session_state.exercise_sheet_level == "1_text":
 
 
     with right:
-      st.subheader("Möglichkeit B", divider="green")
+      st.subheader("Möglichkeit B", divider="green", anchor=False)
       st.write("Text generieren lassen:")
       # st.write("##### Generieren...")
 
@@ -206,7 +218,7 @@ elif st.session_state.exercise_sheet_level == "2_qas":
 elif st.session_state.exercise_sheet_level == "3_answers":
   st.subheader("3. Alle Unterlagen herunterladen...", divider="green", anchor=False)
 
-  st.write("Hier kannst du noch einmal alle Dokumente einsehen und wenn du zufrieden bist einfach herunterladen.")
+  st.write('Hier kannst du noch einmal alle Dokumente einsehen und wenn du zufrieden bist einfach herunterladen. Wenn du noch ein Arbeitsblatt generieren möchtest, klicke einfach auf "Neu starten".')
 
   with st.expander("Generierter Lesetext"):
     st.write(st.session_state.response)
@@ -275,9 +287,19 @@ elif st.session_state.exercise_sheet_level == "3_answers":
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
 
-  st.download_button(
-      label="Gesamtes Dokument herunterladen :material/download:",
-      data=combined_bio.getvalue(),
-      file_name=f"{st.session_state.topic}_Alle_Unterlagen.docx",
-      mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  )
+  left, right = st.columns(2, gap="large")
+
+  with left:
+    if st.download_button(
+        label="Gesamtes Dokument herunterladen :material/download:",
+        data=combined_bio.getvalue(),
+        file_name=f"{st.session_state.topic}_Alle_Unterlagen.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        use_container_width=True
+    ):
+      show_download_popup("Dokument")
+
+  with right:
+    if st.button(label="Neu starten :material/restart_alt:", use_container_width=True):
+      show_restart_popup()
+      restart_arbeitsblatt()
