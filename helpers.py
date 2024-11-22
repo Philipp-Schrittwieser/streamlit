@@ -16,7 +16,7 @@ def configs(st):
     set_css(st)
     
     # 3 Logo setzen
-    logo = "images/books.png"  # Pfad zum Bild
+    logo = "images/books_title.png"  # Pfad zum Bild
     st.logo(image=logo, size="large")  # Bild anzeigen
 
     # x Initialisieren Sie Tailwind

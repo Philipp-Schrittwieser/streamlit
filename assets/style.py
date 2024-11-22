@@ -71,9 +71,9 @@ button[data-testid="stBaseButton-secondary"]:focus p {
   }
 
   img[data-testid="stLogo"] {
-        height: 3rem;  /* Ändern Sie die Höhe nach Bedarf */
+        height: 5rem;  /* Ändern Sie die Höhe nach Bedarf */
         width: auto;    /* Automatische Breite, um das Seitenverhältnis beizubehalten */
-        border-radius: 50%;
+        border-radius: 5%;
     }
   '''
   return styles

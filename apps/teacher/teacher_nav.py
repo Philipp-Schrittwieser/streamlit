@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 def teacher_nav():
 
@@ -32,19 +33,39 @@ def teacher_nav():
 
     else:  
         # Sichtbare Seiten
-        visible_pages = [
+        visible_pages = { "Erstelle ein...": [
             st.Page("apps/teacher/pages/kahoot/kahoot.py",
                     title="Kahoot Quiz", 
                     icon="💡"), 
             st.Page("apps/teacher/pages/exercise_sheet/exercise_sheet.py", 
                     title="Arbeitsblatt", 
-                    icon="📝"),
+                    icon="📝")],
+            "Sonstiges...": [
+            st.Page("apps/teacher/pages/about_us/about_us.py", 
+                    title="Über uns", 
+                    icon="👥"),
             st.Page("apps/teacher/pages/logout/logout.py", 
                     title="Log out 👋")
+        ]}
+
+        teacher_quotes = [
+            "Lehrer zu sein ist einfach. Es ist wie Reiten auf einem Fahrrad. Außer das Fahrrad ist in Flammen, der Raum ist in Flammen, und du bist in Flammen.",
+            "Lehrer haben Superkräfte: Sie können gleichzeitig reden, hören, schreiben, ein Auge auf 30 Kinder werfen und ihre Kaffeetasse finden – alles ohne ihren Stuhl zu verlassen!",
+            "Lehrer: die einzigen Menschen, die dir sagen können, wo du hinmusst, wie du dorthin kommst und wie du dich unterwegs benimmst.",
+            "Lehrer zu sein bedeutet, ein lebenslanger Influencer zu sein – nur dass das Studio ein Klassenzimmer ist und die Likes aus echten Herzen kommen.",
+            "Gute Lehrer sind die, die ihre Schüler etwas lehren. Großartige Lehrer sind die, die ihre Schüler inspirieren, selbst Lehrer zu werden.",
+            "Lehrer: Die einzigen Leute, die dir Hausaufgaben geben und erwarten, dass du dich darüber freust.",
+            "Ein Lehrer nimmt die Hand, öffnet den Verstand und berührt das Herz.",
+            "Das Klassenzimmer ist der einzige Ort, wo ‘es gibt keine dummen Fragen’ sowohl eine Herausforderung als auch ein Versprechen ist.",
+            "Lehrer haben die Fähigkeit, Sterne zu sehen und Schülern zu helfen, ihre zu erreichen."
         ]
 
+        random_quote = random.choice(teacher_quotes)
+
+        st.sidebar.text(f'"{random_quote}"')
+
         # Navigation nur mit sichtbaren Seiten
-        pg = st.navigation({"Erstelle ein...": visible_pages}, position="sidebar")
+        pg = st.navigation(visible_pages, position="sidebar")
         pg.run()
 
         # Switch zur ausgewählten Seite
