@@ -3,6 +3,7 @@ import time
 import pandas as pd
 from apps.teacher.llms.gpt.generate_1_text_gpt import generate_1_text_gpt
 from apps.teacher.llms.gpt.generate_2_qas_gpt import generate_2_qas_gpt
+from apps.teacher.reset_apps import reset_apps
 import io
 from docx import Document
 
@@ -73,7 +74,7 @@ def add_formatted_run(paragraph, text):
         if i % 2 == 1:  # Ungerade Indizes sind fett gedruckt
             run.bold = True
 
-def restart_arbeitsblatt():
+def restart_exercise_sheet():
   st.session_state.exercise_sheet_level = "1_text"
   st.session_state.topic = ""
   st.session_state.response = ""
@@ -81,6 +82,12 @@ def restart_arbeitsblatt():
   st.session_state.fragen = ""
   st.session_state.lösungen = ""
   st.rerun()
+
+
+## Setzt bei Wechsel alles zurück
+if st.session_state.current_page != "apps/teacher/pages/exercise_sheet/exercise_sheet.py":    
+  reset_apps()
+  st.session_state.current_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
 
 if "exercise_sheet_level" not in st.session_state:
   st.session_state.exercise_sheet_level = "1_text"
@@ -92,8 +99,8 @@ left, right = st.columns([15, 1], gap="small", vertical_alignment="center")
 left.title("Arbeitsblatt Generator 📝", anchor=False)
 
 if st.session_state.exercise_sheet_level == "2_qas":
-  if right.button(":material/restart_alt:", use_container_width=False):
-    restart_arbeitsblatt()
+  if right.button(":material/arrow_back:", use_container_width=False):
+    restart_exercise_sheet()
 
 st.text("")  # Fügt eine Leerzeile hinzu
 
@@ -137,7 +144,7 @@ if st.session_state.exercise_sheet_level == "1_text":
   with left:
     st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
     # st.write("##### Einfügen...")
-    topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68)
+    topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68, max_chars=60000)
     st.write("")
     st.session_state.response = topic_text
 
@@ -155,7 +162,8 @@ if st.session_state.exercise_sheet_level == "1_text":
       if st.session_state.topic != "" and st.session_state.response != "":
         st.session_state.response = topic_text
         st.session_state.exercise_sheet_level = "2_qas"
-        show_finish_popup()
+        st.rerun()
+        # show_finish_popup()
 
 
     with right:
@@ -196,24 +204,28 @@ elif st.session_state.exercise_sheet_level == "2_qas":
 
   with st.expander("Lesetext hier ansehen"):
     st.write(st.session_state.response)
-  
-  if st.button(label="Aufgaben generieren :material/laps:", key="button-blue"):
-    show_generate_popup("Aufgaben und Lösungen")
 
-    with st.spinner(''):
-      ai_model = "Max Creator"
-      if ai_model == "Max Creator":
-        qas = generate_2_qas_gpt(st.session_state.response)
-      elif ai_model == "Genius AI":
-        pass
-        # response = generate_quiz_gemini(user_text, num_questions, time_limit)
-      else:
-        st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
-      
-      st.session_state.qas = qas
-      st.session_state.exercise_sheet_level = "3_answers"
-      # st.success("Fertig generiert 🎉🎉🎉")      
-      show_finish_popup()
+
+  left, right = st.columns(2, gap="large")
+
+  with left:
+    if st.button(label="Aufgaben generieren :material/laps:", key="button-blue", use_container_width=True):
+      show_generate_popup("Aufgaben und Lösungen")
+
+      with st.spinner(''):
+        ai_model = "Max Creator"
+        if ai_model == "Max Creator":
+          qas = generate_2_qas_gpt(st.session_state.response)
+        elif ai_model == "Genius AI":
+          pass
+          # response = generate_quiz_gemini(user_text, num_questions, time_limit)
+        else:
+          st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
+        
+        st.session_state.qas = qas
+        st.session_state.exercise_sheet_level = "3_answers"
+        # st.success("Fertig generiert 🎉🎉🎉")      
+        show_finish_popup()
 
 elif st.session_state.exercise_sheet_level == "3_answers":
   st.subheader("3. Alle Unterlagen herunterladen...", divider="green", anchor=False)
@@ -302,4 +314,4 @@ elif st.session_state.exercise_sheet_level == "3_answers":
   with right:
     if st.button(label="Neu starten :material/restart_alt:", use_container_width=True):
       show_restart_popup()
-      restart_arbeitsblatt()
+      restart_exercise_sheet()

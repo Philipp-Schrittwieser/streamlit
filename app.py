@@ -32,7 +32,7 @@ if st.session_state.login_state in ["logging-in", "wrong-pw"]:
         key="password_input"
     )
 
-    st.write("*Diese App ist für die Nutzung am Computer optimiert. 💻 📴")
+    st.write("*Die App ist für die Nutzung am PC optimiert. 💻 📴")
 
 
 # 3. Fehlerbehandlung für falsches Passwort

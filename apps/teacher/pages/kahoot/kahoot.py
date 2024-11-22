@@ -4,6 +4,7 @@ from apps.teacher.pages.kahoot.example_text import example_text
 from apps.teacher.llms.gpt.generate_quiz_gpt import generate_quiz_gpt
 from apps.teacher.llms.gemini.generate_quiz_gemini import generate_quiz_gemini
 from apps.teacher.webscraping.return_transcript import return_transcript
+from apps.teacher.reset_apps import reset_apps
 
 import time
 
@@ -38,32 +39,54 @@ def generate_questions(user_text, num_questions, time_limit, ai_model):
         time.sleep(0.75)
         st.rerun()
 
+def restart_kahoot():
+    st.session_state.questions_generated = False
+    st.toast("App wird neu gestartet... 🏁")
+    time.sleep(0.5)
+    st.rerun()
+
+## Setzt bei Wechsel alles zurück
+if st.session_state.current_page != "apps/teacher/pages/kahoot/kahoot.py":
+    reset_apps()
+    st.session_state.current_page = "apps/teacher/pages/kahoot/kahoot.py"
+
 # Generator Tab
 if st.session_state.questions_generated == False:
     left, right = st.columns(2, gap="large")
 
     with left:
         st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
+        # User Text eingefügt
         user_text = st.text_area("Text hier einfügen:", height=68, value=example_text)
 
     with right:
         st.subheader("Option B: Link einfügen", divider="green", anchor=False)
         user_youtube_link = st.text_input("YouTube-Link hier einfügen:")
         st.session_state.user_youtube_link = user_youtube_link
-        # subtitles_text = get_subtitles_text("https://www.youtube.com/watch?v=ZCvTtb80wEY")
 
-    num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=1)
+    num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
         time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
         ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=0)
 
     st.write("")
+
+    left, right = st.columns(2, gap="large")
     
-    if st.button(label="Fragen generieren :material/laps:", key="button-blue"):
+    with left:
+        if st.button(label="Fragen generieren :material/laps:", key="button-blue", use_container_width=True):
+            
             if st.session_state.user_youtube_link != "":
+                # User Text aus YouTube-Link extrahiert
                 user_text = return_transcript(st.session_state.user_youtube_link)
-                print(user_text)
+                
+                if len(user_text) > 60000:
+                    print("User Text was sliced")
+                    user_text = user_text[:60000]
+
+            # Setzt Name aus ersten 2 Wörtern von user_text
+            st.session_state.topic = "_".join(user_text.split(" ")[:2])
 
             max_text_length = 60000
             user_text_length = len(user_text)
@@ -92,7 +115,7 @@ if st.session_state.questions_generated == True:
     if col1.download_button(
         label="Fragen herunterladen :material/download:",
         data=csv,
-        file_name="kahoot_fragen.csv",
+        file_name=f"{st.session_state.topic}-kahoot_fragen.csv",
         mime="text/csv",
         key="button-blue2",
         use_container_width=True
@@ -108,10 +131,5 @@ if st.session_state.questions_generated == True:
             key="button-blue3",
             use_container_width=True
         ):
-        st.session_state.questions_generated = False
-        st.toast("App wird neu gestartet... 🏁")
-        time.sleep(0.5)
-        st.rerun()
-
-        
+        restart_kahoot()
 
