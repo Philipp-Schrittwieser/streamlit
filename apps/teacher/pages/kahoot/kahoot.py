@@ -57,11 +57,11 @@ if st.session_state.questions_generated == False:
     with left:
         st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
         # User Text eingefügt
-        user_text = st.text_area("Text hier einfügen:", height=68, value=example_text)
+        user_text = st.text_area("Text hier einfügen:", height=68, placeholder=example_text)
 
     with right:
         st.subheader("Option B: Link einfügen", divider="green", anchor=False)
-        user_youtube_link = st.text_input("YouTube-Link hier einfügen:")
+        user_youtube_link = st.text_input("YouTube-Link hier einfügen:", placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8")
         st.session_state.user_youtube_link = user_youtube_link
 
     num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)

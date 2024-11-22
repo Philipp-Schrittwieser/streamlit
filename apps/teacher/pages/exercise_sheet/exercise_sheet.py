@@ -6,6 +6,7 @@ from apps.teacher.llms.gpt.generate_2_qas_gpt import generate_2_qas_gpt
 from apps.teacher.reset_apps import reset_apps
 import io
 from docx import Document
+from apps.teacher.pages.kahoot.example_text import example_text
 
 # st.subheader("1️⃣. Lesetext mit KI generieren")
 # st.subheader("2️⃣. Fragen mit KI generieren (Schüler)")
@@ -144,7 +145,7 @@ if st.session_state.exercise_sheet_level == "1_text":
   with left:
     st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
     # st.write("##### Einfügen...")
-    topic_text = st.text_area("Text hier einfügen:", placeholder="Hier steht dein Text...", height=68, max_chars=60000)
+    topic_text = st.text_area("Text hier einfügen:", placeholder=example_text, height=68, max_chars=60000)
     st.write("")
     st.session_state.response = topic_text
 
