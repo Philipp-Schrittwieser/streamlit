@@ -21,7 +21,7 @@ def generate_quiz_gpt(content, num_questions=10, num_seconds=60, model="gpt-4o-m
         model=model,
         messages=[
             {"role": "system", "content": "Erstelle Quiz-Fragen im strukturierten Format"},
-            {"role": "user", "content": f"Erstelle {num_questions} Quizfragen zum Content, das time_limit ist immer {num_seconds} und correct_answer ist 1, 2, 3 oder 4: {content}"}
+            {"role": "user", "content": f"Erstelle {num_questions} Quizfragen zum Content, das time_limit ist immer {num_seconds} und correct_answer ist 1, 2, 3 oder 4: {content}, bitte variiere die richtige Antwort immer zwischen 1 und 4"}
         ],
         response_format=QuizQuestions,
     )
