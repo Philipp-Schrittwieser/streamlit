@@ -20,8 +20,8 @@ def generate_quiz_gpt(content, num_questions=10, num_seconds=60, model="gpt-4o-m
     completion = client.beta.chat.completions.parse(
         model=model,
         messages=[
-            {"role": "system", "content": "Erstelle Quiz-Fragen im strukturierten Format"},
-            {"role": "user", "content": f"Erstelle {num_questions} Quizfragen zum Content, das time_limit ist immer {num_seconds} und correct_answer ist 1, 2, 3 oder 4: {content}, bitte variiere die richtige Antwort immer zwischen 1 und 4"}
+            {"role": "system", "content": "Create a quiz with questions and answers, the correct answer should vary between 1 and 4"},
+            {"role": "user", "content": f"Create {num_questions} quiz questions for the content, the time limit is always {num_seconds} and the correct answer is 1, 2, 3 or 4: {content}, the correct answer should vary!"}
         ],
         response_format=QuizQuestions,
     )
