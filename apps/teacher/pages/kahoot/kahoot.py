@@ -11,7 +11,9 @@ import time
 st.title("Kahoot Testgenerator💡", anchor=False)
 
 st.subheader("Text oder YouTube-Link einfügen...", divider="blue", anchor=False)
-st.write("Du kannst einen Text einfügen, um dein Kahoot zu generieren oder einen YouTube-Link, aus dem dein Quiz kreiert wird. Wenn Untertitel zu deinem Video vorhanden sind, kann ein Quiz erstellt werden.")
+st.write("Möchtest du aus einem eingefügten Text (Möglichkeit A) oder einem YouTube-Video (Möglichkeit B) ein Kahoot erstellen? Für Option B müssen Untertitel beim Video vorhanden sein.")
+
+st.write("Füge einen Text oder einen YouTube-Link ein und dann drücke auf Fragen generieren.")
 
 if 'questions_generated' not in st.session_state:
     st.session_state.questions_generated = False
@@ -52,15 +54,16 @@ if st.session_state.current_page != "apps/teacher/pages/kahoot/kahoot.py":
 
 # Generator Tab
 if st.session_state.questions_generated == False:
-    left, right = st.columns(2, gap="large")
+
+    left, mid, right = st.columns([6,1,6], gap="small")
 
     with left:
-        st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
+        st.subheader("A: Text einfügen", divider="violet", anchor=False)
         # User Text eingefügt
         user_text = st.text_area("Text hier einfügen:", height=68, placeholder=example_text)
 
     with right:
-        st.subheader("Option B: Link einfügen", divider="green", anchor=False)
+        st.subheader("B: Link einfügen", divider="green", anchor=False)
         user_youtube_link = st.text_input("YouTube-Link hier einfügen:", placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8")
         st.session_state.user_youtube_link = user_youtube_link
 

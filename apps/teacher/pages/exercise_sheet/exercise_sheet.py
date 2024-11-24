@@ -140,10 +140,10 @@ if st.session_state.exercise_sheet_level == "1_text":
   st.text("")
 
 
-  left, right = st.columns(2, gap="large")
+  left, mid, right = st.columns([6,1,6], gap="small")
 
   with left:
-    st.subheader("Option A: Text einfügen", divider="violet", anchor=False)
+    st.subheader("A: Text einfügen", divider="violet", anchor=False)
     # st.write("##### Einfügen...")
     topic_text = st.text_area("Text hier einfügen:", placeholder=example_text, height=68, max_chars=60000)
     st.write("")
@@ -168,7 +168,7 @@ if st.session_state.exercise_sheet_level == "1_text":
 
 
     with right:
-      st.subheader("Option B: Text generieren", divider="green", anchor=False)
+      st.subheader("B: Text generieren", divider="green", anchor=False)
       st.write("Text generieren lassen:")
       # st.write("##### Generieren...")
 

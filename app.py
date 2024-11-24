@@ -5,6 +5,7 @@ from apps.teacher.teacher_nav import teacher_nav
 from apps.test_app.main import other_app
 import time
 from init import initialize_variables
+from assets.footer import footer
 
 # INITS
 pw_kahoot = st.secrets.PW_KAHOOT
@@ -32,8 +33,7 @@ if st.session_state.login_state in ["logging-in", "wrong-pw"]:
         key="password_input"
     )
 
-    st.write("*Die App ist für die Nutzung am PC optimiert. 💻 📴")
-
+    st.write("*Die App ist für die Nutzung am PC optimiert. 💻 📴")    
 
 # 3. Fehlerbehandlung für falsches Passwort
 if st.session_state.login_state == "wrong-pw":
@@ -57,3 +57,5 @@ if st.session_state.login_state == "login-finished":
         st.session_state.login_state = "wrong-pw"
         st.session_state.password_input = ""
         st.rerun()
+
+footer()
