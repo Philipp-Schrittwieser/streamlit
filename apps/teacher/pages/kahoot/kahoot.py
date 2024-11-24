@@ -21,6 +21,12 @@ if 'questions_generated' not in st.session_state:
 if 'user_youtube_link' not in st.session_state:
     st.session_state.user_youtube_link = ""
 
+if 'user_text' not in st.session_state:
+    st.session_state.user_text = ""
+
+if "got_transcript" not in st.session_state:
+    st.session_state.got_transcript = False
+
 def generate_questions(user_text, num_questions, time_limit, ai_model):
     st.success("Generiere Fragen... ⛏️")
     st.toast(f"KI generiert Fragen... 💡")
@@ -45,6 +51,7 @@ def restart_kahoot():
     st.session_state.questions_generated = False
     st.toast("App wird neu gestartet... 🏁")
     time.sleep(0.5)
+    reset_apps()
     st.rerun()
 
 ## Setzt bei Wechsel alles zurück
@@ -61,11 +68,24 @@ if st.session_state.questions_generated == False:
         st.subheader("A: Text einfügen", divider="violet", anchor=False)
         # User Text eingefügt
         user_text = st.text_area("Text hier einfügen:", height=68, placeholder=example_text)
+        st.session_state.user_text = user_text
 
     with right:
-        st.subheader("B: Link einfügen", divider="green", anchor=False)
-        user_youtube_link = st.text_input("YouTube-Link hier einfügen:", placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8")
-        st.session_state.user_youtube_link = user_youtube_link
+        st.subheader("B: Link einfügen", divider="green", anchor=False)            
+        user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
+                                          placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
+                                          key="user_youtube_link",
+                                          )
+        st.session_state.got_transcript = return_transcript(user_youtube_link)
+
+        print("API Call: ", st.session_state.got_transcript)
+        if st.session_state.got_transcript == False:
+            st.write("")    
+        elif st.session_state.got_transcript:
+            st.success("Untertitel gefunden ✅")
+            st.session_state.user_text = st.session_state.got_transcript
+        elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
+            st.error("Keine Untertitel verfügbar ❌")
 
     num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
 
@@ -80,19 +100,34 @@ if st.session_state.questions_generated == False:
     with left:
         if st.button(label="Fragen generieren :material/laps:", key="button-blue", use_container_width=True):
             
-            if st.session_state.user_youtube_link != "":
+            # Wenn YouTube Link, generiere Fragen aus eingefügten Text
+            if st.session_state.user_youtube_link != "" and st.session_state.got_transcript != None:
+
                 # User Text aus YouTube-Link extrahiert
-                user_text = return_transcript(st.session_state.user_youtube_link)
+                user_text = st.session_state.user_text
                 
+                # Schneidet Trankskript automatisch auf max. 60k Zeichen zu
                 if len(user_text) > 60000:
                     print("User Text was sliced")
                     user_text = user_text[:60000]
+            
+            # Error falls keine Untertitel verfügbar
+            if st.session_state.user_youtube_link != "" and st.session_state.got_transcript == None:
+                st.error("Füge einen korrekten Link ein 🔗")
+                st.stop()
 
-            # Setzt Name aus ersten 2 Wörtern von user_text
+            # Error falls kein Text eingefügt
+            if st.session_state.user_text == "" and st.session_state.user_youtube_link == "":
+                st.error("Füge einen Text 📝 oder einen Link 🔗 ein, um ein Quiz zu generieren...")
+                st.stop()
+
+                # Setzt Name aus ersten 2 Wörtern von user_text
             st.session_state.topic = "_".join(user_text.split(" ")[:2])
 
+            # Wenn kein YouTube Link, generiere Fragen aus eingefügten Text
             max_text_length = 60000
             user_text_length = len(user_text)
+
             # Limit 60k Zeichen
             if user_text_length > max_text_length:
                 # Anzeigen der Nachrichten in Streamlit mit Formatierung und Ersetzung in einer Zeile

@@ -101,6 +101,7 @@ left.title("Arbeitsblatt Generator 📝", anchor=False)
 
 if st.session_state.exercise_sheet_level == "2_qas":
   if right.button(":material/arrow_back:", use_container_width=False):
+    show_restart_popup()
     restart_exercise_sheet()
 
 st.text("")  # Fügt eine Leerzeile hinzu
