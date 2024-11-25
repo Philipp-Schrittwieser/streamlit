@@ -1,5 +1,5 @@
 from youtube_transcript_api import YouTubeTranscriptApi
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs # Teil von Python
 
 def get_video_id(url):
     """Extrahiert die Video-ID aus einer YouTube-URL."""
