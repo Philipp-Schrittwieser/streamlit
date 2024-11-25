@@ -7,6 +7,7 @@ import time
 from init import initialize_variables
 from assets.footer import footer
 
+# id="G-BCJ64HHRQY"
 
 # INITS
 pw_kahoot = st.secrets.PW_KAHOOT
@@ -15,19 +16,31 @@ pw_other = st.secrets.PW_OTHER
 # 1. Title, Icon, Logo, Google Analytics, Footer
 configs(st)
 
+import streamlit as st
+import streamlit.components.v1 as components
+
+# Ersetzen Sie 'UA-XXXXXXXXX-X' mit Ihrer tatsächlichen Google Analytics Tracking ID
+ga_tracking_id = 'UA-XXXXXXXXX-X'
+
+components.html(
+    f"""
+    <script>
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id={ga_tracking_id}';
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){{dataLayer.push(arguments);}}
+        gtag('js', new Date());
+        gtag('config', '{ga_tracking_id}');
+    </script>
+    """,
+    height=0
+)
+
+
 initialize_variables()
-
-st.markdown("""
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BCJ64HHRQY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BCJ64HHRQY');
-</script>
-""", unsafe_allow_html=True)
 
 footer()
 
