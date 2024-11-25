@@ -6,7 +6,6 @@ from apps.test_app.main import other_app
 import time
 from init import initialize_variables
 from assets.footer import footer
-from streamlit_analytics import track_page_view
 
 
 # INITS
