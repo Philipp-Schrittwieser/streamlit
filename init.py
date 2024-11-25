@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def initialize_variables():
     # Initialisiere Zustandsvariablen, falls sie noch nicht existieren
     if 'login_state' not in st.session_state:
