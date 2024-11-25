@@ -6,7 +6,8 @@ from apps.test_app.main import other_app
 import time
 from init import initialize_variables
 from assets.footer import footer
-from assets.import_gtm import import_gtm
+from streamlit_analytics import track_page_view
+
 
 # INITS
 pw_kahoot = st.secrets.PW_KAHOOT
@@ -17,7 +18,17 @@ configs(st)
 
 initialize_variables()
 
-import_gtm()
+st.markdown("""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BCJ64HHRQY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BCJ64HHRQY');
+</script>
+""", unsafe_allow_html=True)
 
 footer()
 
