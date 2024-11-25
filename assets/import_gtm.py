@@ -1,7 +1,19 @@
 import streamlit.components.v1 as components
 
 def import_gtm():
-  # Google Tag Manager einbinden
-  with open("gtm.html", "r") as f:
-      html_code = f.read()
-  components.html(html_code, height=0)
+    # Google Tag Manager einbinden
+    gtm_code = """
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-W7P62GV8');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W7P62GV8"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    """
+    components.html(gtm_code, height=0)
