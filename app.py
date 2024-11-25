@@ -6,15 +6,20 @@ from apps.test_app.main import other_app
 import time
 from init import initialize_variables
 from assets.footer import footer
+from assets.import_gtm import import_gtm
 
 # INITS
 pw_kahoot = st.secrets.PW_KAHOOT
 pw_other = st.secrets.PW_OTHER
 
-# 1. Title, Icon und Logo setzen
+# 1. Title, Icon, Logo, Google Analytics, Footer
 configs(st)
 
 initialize_variables()
+
+import_gtm()
+
+footer()
 
 def check_password():
     password = st.session_state.password_input  # Hole Wert über key
@@ -57,5 +62,3 @@ if st.session_state.login_state == "login-finished":
         st.session_state.login_state = "wrong-pw"
         st.session_state.password_input = ""
         st.rerun()
-
-footer()
