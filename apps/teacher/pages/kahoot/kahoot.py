@@ -165,28 +165,49 @@ if st.session_state.questions_generated == True:
         # Wenn response generiert wurde
     if isinstance(st.session_state.response, pd.DataFrame) and not st.session_state.response.empty:
         df = st.session_state.response
+        # Speichere alle generierten Quize in DB
+        st.session_state.id = str(uuid.uuid4())
+        print(f"ID Created: {st.session_state.id}")
+
+        st.dataframe(
+            df,
+            hide_index=True,
+            use_container_width=True
+        )
+
+        # CSV Buffer erstellen
+        csv = df.to_csv(index=False)
+        new_kahoot(st.session_state.id, return_current_pagename(st.session_state.current_page), st.session_state.topic, st.session_state.user_text, st.session_state.user_youtube_link, csv)
 
     # Wenn Kahoot from Sharing (aus DB) kommt
     else:
         print(f"Kahoot from DB: {st.session_state.kahoot['csv']}")
         df = pd.read_csv(StringIO(st.session_state.kahoot['csv']))
+        st.dataframe(
+            df,
+            hide_index=True,
+            use_container_width=True
+        )
+
+        # CSV Buffer erstellen
+        csv = df.to_csv(index=False)
     
 
-    st.dataframe(
-        df,
-        hide_index=True,
-        use_container_width=True
-    )
+    left, right = st.columns(spec=[8,2], gap="medium", vertical_alignment="top")
 
-    # CSV Buffer erstellen
-    csv = df.to_csv(index=False)
-
-    # Speichere alle generierten Quize in DB
-    st.session_state.id = str(uuid.uuid4())
-    print(f"ID Created: {st.session_state.id}")
-    new_kahoot(st.session_state.id, return_current_pagename(st.session_state.current_page), st.session_state.topic, st.session_state.user_text, st.session_state.user_youtube_link, csv)
+    with right:
+        sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
+        print(f"ID: {sharing_link}")
+        st_copy_to_clipboard(
+            # text="https://ai-school.onrender.com/" + st.session_state.id,
+            text=sharing_link,
+            before_copy_label="Link teilen 🔗",
+            after_copy_label="Kopiert ✔️",
+            show_text=False,
+            key="button-blue4"
+        )
         
-    col1, col2 = st.columns(spec=2, gap="large")
+    col1, col2 = st.columns(spec=[3,3], gap="medium")
 
     # Download Button
     if col1.download_button(
@@ -209,13 +230,4 @@ if st.session_state.questions_generated == True:
         ):
         restart_kahoot()
 
-    sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
-    print(f"ID: {sharing_link}")
-    st_copy_to_clipboard(
-        # text="https://ai-school.onrender.com/" + st.session_state.id,
-        text=sharing_link,
-        before_copy_label="Link teilen 🔗",
-        after_copy_label="Kopiert ✔️",
-        show_text=False
-    )
 

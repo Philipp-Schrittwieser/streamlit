@@ -41,6 +41,7 @@ def check_referal():
     with st.spinner("Lade Kahoot..."):
         st.session_state.kahoot = return_kahoot(from_id)
         st.session_state.questions_generated = True
+        st.session_state.id = from_id
         st.session_state.topic = st.session_state.kahoot["topic"]
 
     shared_item_from_db = st.session_state.kahoot

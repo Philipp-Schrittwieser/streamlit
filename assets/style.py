@@ -53,22 +53,7 @@ button[data-testid="stBaseButton-secondary"]:active {
 button[data-testid="stBaseButton-secondary"]:focus p {
     color: white; 
   }    
-
-  a[href="https://streamlit.io/cloud"] {
-    display: none !important;
-  }
-
-  a[href="https://share.streamlit.io/user/philipp-schrittwieser"] {
-    display: none !important;
-  }
   
-  ._link_gzau3_10 {
-    display: none !important;
-  }
-
-  ._profileContainer_gzau3_53 {
-    display: none !important;
-  }
 
   img[data-testid="stLogo"] {
         height: 5rem;  /* Ändern Sie die Höhe nach Bedarf */
