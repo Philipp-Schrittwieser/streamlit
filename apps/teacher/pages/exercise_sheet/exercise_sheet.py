@@ -96,6 +96,9 @@ if "exercise_sheet_level" not in st.session_state:
 if "response" not in st.session_state:
   st.session_state.response = ""
 
+if "current_page" not in st.session_state:
+  st.session_state.current_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
+
 left, right = st.columns([15, 1], gap="small", vertical_alignment="center")
 left.title("Arbeitsblatt Generator 📝", anchor=False)
 

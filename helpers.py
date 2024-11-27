@@ -1,7 +1,17 @@
 import time
 from assets.style import return_styles
+from assets.footer import footer
 
-def configs(st):
+def return_current_pagename(file_path):
+    return file_path.split(".")[0].split("/")[-1]
+
+def set_css(st):
+    # with open("assets/style.css") as f:
+    #     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    st.markdown(f'<style>{return_styles()}</style>', unsafe_allow_html=True)
+
+
+def visual_configs(st):
     # 1 Title und Icon setzen
     st.set_page_config(
     page_title="AI School",
@@ -23,10 +33,9 @@ def configs(st):
     # tw.initialize_tailwind()
     # return tw
     
-def set_css(st):
-    # with open("assets/style.css") as f:
-    #     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-    st.markdown(f'<style>{return_styles()}</style>', unsafe_allow_html=True)
+    # 4. Custom Footer
+    footer()
+
  
 
 def loading_bar(progress_bar):

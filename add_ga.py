@@ -16,6 +16,7 @@ GA_SCRIPT = """
 </script>
 """
 
+
 def inject_ga():
     
     index_path = pathlib.Path(st.__file__).parent / "static" / "index.html"

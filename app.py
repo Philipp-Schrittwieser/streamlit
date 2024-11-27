@@ -1,48 +1,17 @@
 import streamlit as st
-from helpers import configs
+from helpers import visual_configs
 from assets.htmls import h1
 from apps.teacher.teacher_nav import teacher_nav
 from apps.test_app.main import other_app
 import time
-from init import initialize_variables
-from assets.footer import footer
+from init import init_routine
 
-# id="G-BCJ64HHRQY"
 
-# INITS
+# 0 Secrets
 pw_kahoot = st.secrets.PW_KAHOOT
 pw_other = st.secrets.PW_OTHER
 
-# 1. Title, Icon, Logo, Google Analytics, Footer
-configs(st)
-
-import streamlit as st
-import streamlit.components.v1 as components
-
-# Ersetzen Sie 'UA-XXXXXXXXX-X' mit Ihrer tatsächlichen Google Analytics Tracking ID
-ga_tracking_id = 'UA-XXXXXXXXX-X'
-
-components.html(
-    f"""
-    <script>
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id={ga_tracking_id}';
-        document.head.appendChild(script);
-
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){{dataLayer.push(arguments);}}
-        gtag('js', new Date());
-        gtag('config', '{ga_tracking_id}');
-    </script>
-    """,
-    height=0
-)
-
-
-initialize_variables()
-
-footer()
+init_routine()
 
 def check_password():
     password = st.session_state.password_input  # Hole Wert über key
@@ -62,6 +31,11 @@ if st.session_state.login_state in ["logging-in", "wrong-pw"]:
     )
 
     st.write("*Die App ist für die Nutzung am PC optimiert. 💻 📴")    
+
+    # Logge automatisch ein | Log In deaktiviert
+    st.session_state.password = pw_kahoot
+    st.session_state.login_state = "login-finished"
+    st.rerun()
 
 # 3. Fehlerbehandlung für falsches Passwort
 if st.session_state.login_state == "wrong-pw":

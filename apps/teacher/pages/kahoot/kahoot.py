@@ -5,18 +5,18 @@ from apps.teacher.llms.gpt.generate_quiz_gpt import generate_quiz_gpt
 from apps.teacher.llms.gemini.generate_quiz_gemini import generate_quiz_gemini
 from apps.teacher.webscraping.return_transcript import return_transcript
 from apps.teacher.reset_apps import reset_apps
-
+from helpers import return_current_pagename
+from db.db import new_kahoot
+import uuid
+from st_copy_to_clipboard import st_copy_to_clipboard
 import time
+from io import StringIO
 
 st.title("Kahoot Testgenerator💡", anchor=False)
 
-st.subheader("Text oder YouTube-Link einfügen...", divider="blue", anchor=False)
-st.write("Möchtest du aus einem eingefügten Text (Möglichkeit A) oder einem YouTube-Video (Möglichkeit B) ein Kahoot erstellen? Für Option B müssen Untertitel beim Video vorhanden sein.")
-
-st.write("Füge einen Text oder einen YouTube-Link ein und dann drücke auf Fragen generieren.")
-
 if 'questions_generated' not in st.session_state:
     st.session_state.questions_generated = False
+    # st.session_state.questions_generated = True
 
 if 'user_youtube_link' not in st.session_state:
     st.session_state.user_youtube_link = ""
@@ -27,6 +27,18 @@ if 'user_text' not in st.session_state:
 if "got_transcript" not in st.session_state:
     st.session_state.got_transcript = False
 
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "apps/teacher/pages/kahoot/kahoot.py"
+
+if "id" not in st.session_state:
+    st.session_state.id = ""
+
+if "response" not in st.session_state:
+    st.session_state.response = False
+
+if "topic" not in st.session_state:
+    st.session_state.topic = ""
+
 def generate_questions(user_text, num_questions, time_limit, ai_model):
     st.success("Generiere Fragen... ⛏️")
     st.toast(f"KI generiert Fragen... 💡")
@@ -35,12 +47,12 @@ def generate_questions(user_text, num_questions, time_limit, ai_model):
 
     with st.spinner(''):
         if ai_model == "Open Creator":
-            response = generate_quiz_gpt(user_text, num_questions, time_limit)
+            llm_resp = generate_quiz_gpt(user_text, num_questions, time_limit)
         elif ai_model == "Genius AI":
-            response = generate_quiz_gemini(user_text, num_questions, time_limit)
+            llm_resp = generate_quiz_gemini(user_text, num_questions, time_limit)
         else:
             st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
-        st.session_state.response = response
+        st.session_state.response = llm_resp
         st.session_state.questions_generated = True
         # st.success("Fertig generiert 🎉🎉🎉")
         st.balloons()
@@ -62,6 +74,10 @@ if st.session_state.current_page != "apps/teacher/pages/kahoot/kahoot.py":
 # Generator Tab
 if st.session_state.questions_generated == False:
 
+    st.subheader("Text oder YouTube-Link einfügen...", divider="blue", anchor=False)
+    st.write("Möchtest du aus einem eingefügten Text (Möglichkeit A) oder einem YouTube-Video (Möglichkeit B) ein Kahoot erstellen? Für Option B müssen Untertitel beim Video vorhanden sein.")
+    st.write("Füge einen Text oder einen YouTube-Link ein und dann drücke auf Fragen generieren.")
+
     left, mid, right = st.columns([6,1,6], gap="small")
 
     with left:
@@ -78,7 +94,7 @@ if st.session_state.questions_generated == False:
                                           )
         st.session_state.got_transcript = return_transcript(user_youtube_link)
 
-        print("API Call: ", st.session_state.got_transcript)
+        # print("API Call: ", st.session_state.got_transcript)
         if st.session_state.got_transcript == False:
             st.write("")    
         elif st.session_state.got_transcript:
@@ -122,7 +138,8 @@ if st.session_state.questions_generated == False:
                 st.stop()
 
                 # Setzt Name aus ersten 2 Wörtern von user_text
-            st.session_state.topic = "_".join(user_text.split(" ")[:2])
+            if st.session_state.topic == "":
+                st.session_state.topic = "_".join(user_text.split(" ")[:2])
 
             # Wenn kein YouTube Link, generiere Fragen aus eingefügten Text
             max_text_length = 60000
@@ -137,21 +154,43 @@ if st.session_state.questions_generated == False:
                 
             else:
                 generate_questions(user_text, num_questions, time_limit, ai_model)
+                st.session_state.user_text = user_text
 
 # Ergebnis Tab
 if st.session_state.questions_generated == True:
-    st.header("Ergebnis", anchor=False)
-    df = pd.DataFrame(st.session_state.response)
-    st.write(df)
+
+    st.header("Ergebnis", anchor=False, divider="blue")
+    st.write("Hier kannst du das Ergebnis als Excel-Dokument herunterladen, deine Fragen neu generieren oder den Link teilen.")
+    
+        # Wenn response generiert wurde
+    if isinstance(st.session_state.response, pd.DataFrame) and not st.session_state.response.empty:
+        df = st.session_state.response
+
+    # Wenn Kahoot from Sharing (aus DB) kommt
+    else:
+        print(f"Kahoot from DB: {st.session_state.kahoot['csv']}")
+        df = pd.read_csv(StringIO(st.session_state.kahoot['csv']))
+    
+
+    st.dataframe(
+        df,
+        hide_index=True,
+        use_container_width=True
+    )
 
     # CSV Buffer erstellen
     csv = df.to_csv(index=False)
+
+    # Speichere alle generierten Quize in DB
+    st.session_state.id = str(uuid.uuid4())
+    print(f"ID Created: {st.session_state.id}")
+    new_kahoot(st.session_state.id, return_current_pagename(st.session_state.current_page), st.session_state.topic, st.session_state.user_text, st.session_state.user_youtube_link, csv)
         
     col1, col2 = st.columns(spec=2, gap="large")
 
     # Download Button
     if col1.download_button(
-        label="Fragen herunterladen :material/download:",
+        label="Herunterladen :material/download:",
         data=csv,
         file_name=f"{st.session_state.topic}-kahoot_fragen.csv",
         mime="text/csv",
@@ -161,7 +200,6 @@ if st.session_state.questions_generated == True:
         st.toast("Fragen wurden heruntergeladen ✅ ")
         time.sleep(1)
         st.toast("Du kannst sie dir rechts oben im Browser ansehen! 🌎")
-
         
     # Neustart Button
     if col2.button(
@@ -170,4 +208,14 @@ if st.session_state.questions_generated == True:
             use_container_width=True
         ):
         restart_kahoot()
+
+    sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
+    print(f"ID: {sharing_link}")
+    st_copy_to_clipboard(
+        # text="https://ai-school.onrender.com/" + st.session_state.id,
+        text=sharing_link,
+        before_copy_label="Link teilen 🔗",
+        after_copy_label="Kopiert ✔️",
+        show_text=False
+    )
 

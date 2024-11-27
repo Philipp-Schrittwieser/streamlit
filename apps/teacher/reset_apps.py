@@ -3,6 +3,10 @@ import streamlit as st
 def reset_apps():
   # Kahoot
   st.session_state.questions_generated = False
+  # st.session_state.questions_generated = True
+
+  # Clear query params, falls neustart nach shared Dok
+  st.query_params.clear()
 
   # Exercise Sheet
   st.session_state.exercise_sheet_level = "1_text"
