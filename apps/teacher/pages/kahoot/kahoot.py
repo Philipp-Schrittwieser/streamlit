@@ -198,20 +198,6 @@ if st.session_state.questions_generated == True:
         df.to_excel(buffer, index=False, engine='xlsxwriter')
         excel_data = buffer.getvalue()
 
-    left, right = st.columns(spec=[8,2], gap="medium", vertical_alignment="top")
-
-    with right:
-        sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
-        print(f"ID: {sharing_link}")
-        st_copy_to_clipboard(
-            # text="https://ai-school.onrender.com/" + st.session_state.id,
-        text=sharing_link,
-        before_copy_label="Link teilen 🔗",
-        after_copy_label="Kopiert ✔️",
-        show_text=False,
-        key="button-blue4"
-    )
-
     col1, col2 = st.columns(spec=[3,3], gap="medium")
 
     # Download Button
@@ -234,3 +220,29 @@ if st.session_state.questions_generated == True:
             use_container_width=True
         ):
         restart_kahoot()
+
+    st.write("######")
+    
+    st.subheader("Keine Ahnung wie du das Excel in Kahoot hochlädst?", divider="violet", anchor=False)
+    st.write("Kein Problem! Schau dir unsere kurze Anleitung unterhalb an:")
+
+    with st.expander("🎥 Video-Anleitung zu Kahoot-Upload"):
+        st.video("https://www.youtube.com/watch?v=n50h1qkUCFs")
+
+    
+        
+    # st.write("######")
+    
+    # left, mid, right = st.columns(spec=[1,8,1], gap="medium", vertical_alignment="top")
+
+    # with mid:
+    #     sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
+    #     print(f"ID: {sharing_link}")
+    #     st_copy_to_clipboard(
+    #         # text="https://ai-school.onrender.com/" + st.session_state.id,
+    #     text=sharing_link,
+    #     before_copy_label="🔴 Deine Stundenvorbereitung mit einer Kollegin / einem Kollegen teilen 👩‍🏫 👨‍🏫 🔗",
+    #     after_copy_label="✔️ Link erfolgreich in Zwischenablage kopiert & bereit zum versenden 👩‍🏫 👨‍🏫 🔗",
+    #     show_text=False,
+    #     key="button-blue4"
+    # )
