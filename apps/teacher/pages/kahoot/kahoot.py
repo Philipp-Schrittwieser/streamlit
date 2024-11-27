@@ -139,7 +139,12 @@ if st.session_state.questions_generated == False:
 
                 # Setzt Name aus ersten 2 Wörtern von user_text
             if st.session_state.topic == "":
-                st.session_state.topic = "_".join(user_text.split(" ")[:2])
+                # print(f"User Text Input: {st.session_state.user_text}")
+                # Replace alles, was nicht in Dateiname vorkommen darf
+                topic_cleaned = st.session_state.user_text.replace('\n', ' ').replace('\t', ' ').replace('.', ' ').replace(',', ' ').replace('!', ' ').replace('?', ' ').replace('/', ' ').replace('\\', ' ').replace(':', ' ').replace('*', ' ').replace('"', ' ').replace("'", ' ').replace('<', ' ').replace('>', ' ').replace('|', ' ').strip()
+                # print(f"Text cleaned: {topic_cleaned}")
+                st.session_state.topic = "_".join(topic_cleaned.split(" ")[:2])
+                # print(f"Topic: {st.session_state.topic}")
 
             # Wenn kein YouTube Link, generiere Fragen aus eingefügten Text
             max_text_length = 60000
@@ -199,12 +204,11 @@ if st.session_state.questions_generated == True:
         excel_data = buffer.getvalue()
 
     col1, col2 = st.columns(spec=[3,3], gap="medium")
-
     # Download Button
     if col1.download_button(
         label="Herunterladen :material/download:",
         data=excel_data,
-        file_name=f"{st.session_state.topic}-kahoot_fragen.xlsx",
+        file_name=f"{st.session_state.topic}-Kahoot_Fragen.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         key="button-blue2",
         use_container_width=True
