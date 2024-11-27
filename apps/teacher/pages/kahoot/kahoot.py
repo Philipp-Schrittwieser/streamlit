@@ -160,6 +160,11 @@ if st.session_state.questions_generated == False:
 if st.session_state.questions_generated == True:
 
     st.header("Ergebnis", anchor=False, divider="blue")
+
+    sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
+    print(f"ID: {sharing_link}")
+
+        
     st.write("Hier kannst du das Ergebnis als Excel-Dokument herunterladen, deine Fragen neu generieren oder den Link teilen.")
     
         # Wenn response generiert wurde
@@ -181,7 +186,7 @@ if st.session_state.questions_generated == True:
 
     # Wenn Kahoot from Sharing (aus DB) kommt
     else:
-        print(f"Kahoot from DB: {st.session_state.kahoot['csv']}")
+        # print(f"Kahoot from DB: {st.session_state.kahoot['csv']}")
         df = pd.read_csv(StringIO(st.session_state.kahoot['csv']))
         st.dataframe(
             df,
@@ -196,17 +201,15 @@ if st.session_state.questions_generated == True:
     left, right = st.columns(spec=[8,2], gap="medium", vertical_alignment="top")
 
     with right:
-        sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
-        print(f"ID: {sharing_link}")
         st_copy_to_clipboard(
             # text="https://ai-school.onrender.com/" + st.session_state.id,
-            text=sharing_link,
-            before_copy_label="Link teilen 🔗",
-            after_copy_label="Kopiert ✔️",
-            show_text=False,
-            key="button-blue4"
-        )
-        
+        text=sharing_link,
+        before_copy_label="Link teilen 🔗",
+        after_copy_label="Kopiert ✔️",
+        show_text=False,
+        key="button-blue4"
+    )
+
     col1, col2 = st.columns(spec=[3,3], gap="medium")
 
     # Download Button
