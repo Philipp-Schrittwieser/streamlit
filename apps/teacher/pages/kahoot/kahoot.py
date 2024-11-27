@@ -227,7 +227,7 @@ if st.session_state.questions_generated == True:
     st.write("Kein Problem! Schau dir unsere kurze Anleitung unterhalb an:")
 
     with st.expander("🎥 Video-Anleitung zu Kahoot-Upload"):
-        st.video("https://www.youtube.com/watch?v=n50h1qkUCFs")
+        st.video("https://youtu.be/n2KJqiSG7bs")
 
     
         
