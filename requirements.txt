@@ -10,3 +10,4 @@ youtube-transcript-api==0.6.3
 beautifulsoup4==4.12.3
 st-copy-to-clipboard==0.1.6
 pymongo==4.10.0
+xlsxwriter==3.2.0

@@ -10,7 +10,7 @@ from db.db import new_kahoot
 import uuid
 from st_copy_to_clipboard import st_copy_to_clipboard
 import time
-from io import StringIO
+from io import StringIO, BytesIO
 
 st.title("Kahoot Testgenerator💡", anchor=False)
 
@@ -177,9 +177,11 @@ if st.session_state.questions_generated == True:
             use_container_width=True
         )
 
-        # CSV Buffer erstellen
-        csv = df.to_csv(index=False)
-        new_kahoot(st.session_state.id, return_current_pagename(st.session_state.current_page), st.session_state.topic, st.session_state.user_text, st.session_state.user_youtube_link, csv)
+        # Excel Buffer erstellen
+        buffer = BytesIO()
+        df.to_excel(buffer, index=False, engine='xlsxwriter')
+        excel_data = buffer.getvalue()
+        new_kahoot(st.session_state.id, return_current_pagename(st.session_state.current_page), st.session_state.topic, st.session_state.user_text, st.session_state.user_youtube_link, excel_data)
 
     # Wenn Kahoot from Sharing (aus DB) kommt
     else:
@@ -191,16 +193,16 @@ if st.session_state.questions_generated == True:
             use_container_width=True
         )
 
-        # CSV Buffer erstellen
-        csv = df.to_csv(index=False)
-    
+        # Excel Buffer erstellen
+        buffer = BytesIO()
+        df.to_excel(buffer, index=False, engine='xlsxwriter')
+        excel_data = buffer.getvalue()
 
     left, right = st.columns(spec=[8,2], gap="medium", vertical_alignment="top")
 
     with right:
         sharing_link = st.session_state.base_url + "?id=" + st.session_state.id
         print(f"ID: {sharing_link}")
-        
         st_copy_to_clipboard(
             # text="https://ai-school.onrender.com/" + st.session_state.id,
         text=sharing_link,
@@ -215,9 +217,9 @@ if st.session_state.questions_generated == True:
     # Download Button
     if col1.download_button(
         label="Herunterladen :material/download:",
-        data=csv,
-        file_name=f"{st.session_state.topic}-kahoot_fragen.csv",
-        mime="text/csv",
+        data=excel_data,
+        file_name=f"{st.session_state.topic}-kahoot_fragen.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         key="button-blue2",
         use_container_width=True
     ):
@@ -232,5 +234,3 @@ if st.session_state.questions_generated == True:
             use_container_width=True
         ):
         restart_kahoot()
-
-
