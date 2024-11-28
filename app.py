@@ -6,6 +6,9 @@ from apps.test_app.main import other_app
 import time
 from init import init_routine
 
+import os
+os.environ.pop("HTTP_PROXY", None)
+os.environ.pop("HTTPS_PROXY", None)
 
 # 0 Secrets
 pw_kahoot = st.secrets.PW_KAHOOT
