@@ -13,7 +13,7 @@ class QuestionAnswerPair(BaseModel):
 class QuestionAnswerPairs(BaseModel):
     question_answer_pairs: list[QuestionAnswerPair]
 
-def generate_2_qas_gpt(input, model="gpt-4o-mini"):
+def generate_2_qas_gpt(input, model="gpt-4o-mini-2024-07-18"):
     client = OpenAI(api_key=openai_api_key)
     completion = client.beta.chat.completions.parse(
         model=model,

@@ -15,7 +15,7 @@ class QuizQuestion(BaseModel):
 class QuizQuestions(BaseModel):
     questions: list[QuizQuestion]
 
-def generate_quiz_gpt(content, num_questions=10, num_seconds=60, model="gpt-4o-mini"):
+def generate_quiz_gpt(content, num_questions=10, num_seconds=60, model="gpt-4o-mini-2024-07-18"):
     client = OpenAI(api_key=openai_api_key)
     completion = client.beta.chat.completions.parse(
         model=model,
