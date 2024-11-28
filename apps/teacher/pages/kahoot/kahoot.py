@@ -112,7 +112,7 @@ if st.session_state.questions_generated == False:
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
         time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
-        ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=0)
+        ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
 
     st.write("")
 
