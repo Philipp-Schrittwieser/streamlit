@@ -87,26 +87,28 @@ if st.session_state.questions_generated == False:
         st.session_state.user_text = user_text
 
     with right:
-        st.subheader("B: Link einfügen", divider="green", anchor=False)            
-        user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
-                                          placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
-                                          key="user_youtube_link",
-                                          )
-        # st.session_state.got_transcript = return_transcript(user_youtube_link)
+        st.subheader("B: Link einfügen", divider="green", anchor=False) 
+        st.write("Bald wieder verfügbar 🚧")           
+    #     user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
+    #                                       placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
+    #                                       key="user_youtube_link",
+    #                                       )
+    #     # st.session_state.got_transcript = return_transcript(user_youtube_link)
 
-        left, right = st.columns([11,2], gap="small", vertical_alignment="center")
+
+        # left, right = st.columns([11,2], gap="small", vertical_alignment="center")
         
-        with left:
-            # print("API Call: ", st.session_state.got_transcript)
-            if st.session_state.got_transcript == False:
-                st.write("")    
-            elif st.session_state.got_transcript:
-                st.success("Untertitel gefunden ✅")
-                st.session_state.user_text = st.session_state.got_transcript
-            elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
-                st.error("Keine Untertitel verfügbar ❌")
+        # with left:
+        #     # print("API Call: ", st.session_state.got_transcript)
+        #     if st.session_state.got_transcript == False:
+        #         st.write("")    
+        #     elif st.session_state.got_transcript:
+        #         st.success("Untertitel gefunden ✅")
+        #         st.session_state.user_text = st.session_state.got_transcript
+        #     elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
+        #         st.error("Keine Untertitel verfügbar ❌")
 
-        right.button(":material/check:")
+        # right.button(":material/check:")
 
     num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
 
