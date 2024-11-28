@@ -1,6 +1,12 @@
 import time
 from assets.style import return_styles
 from assets.footer import footer
+import streamlit as st
+
+# Schaut ob lokal oder deployed und ändert title
+is_local = " *LOCAL*" if st.secrets["IS_DEPLOYED"] == "false" else ""
+page_title = "AI School" + is_local
+
 
 def return_current_pagename(file_path):
     return file_path.split(".")[0].split("/")[-1]
@@ -14,7 +20,7 @@ def set_css(st):
 def visual_configs(st):
     # 1 Title und Icon setzen
     st.set_page_config(
-    page_title="AI School",
+    page_title=page_title,
     page_icon="📚"
     # page_icon="images/female2.webp",
     # initial_sidebar_state="collapsed"
