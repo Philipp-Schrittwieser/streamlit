@@ -1,3 +1,6 @@
+
+'''
+
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import urlparse, parse_qs
 import random
@@ -88,3 +91,5 @@ def return_transcript(video_url):
             print(text_transcript[0:25])
             return text_transcript
     return None
+
+    '''
