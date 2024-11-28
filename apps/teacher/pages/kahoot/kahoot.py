@@ -3,7 +3,7 @@ import pandas as pd
 from apps.teacher.pages.kahoot.example_text import example_text
 from apps.teacher.llms.gpt.generate_quiz_gpt import generate_quiz_gpt
 from apps.teacher.llms.gemini.generate_quiz_gemini import generate_quiz_gemini
-from apps.teacher.webscraping.return_transcript import return_transcript
+# from apps.teacher.webscraping.return_transcript import return_transcript
 from apps.teacher.reset_apps import reset_apps
 from helpers import return_current_pagename
 from db.db import new_kahoot
