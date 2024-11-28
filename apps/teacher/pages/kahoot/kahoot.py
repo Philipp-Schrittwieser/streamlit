@@ -92,7 +92,7 @@ if st.session_state.questions_generated == False:
                                           placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
                                           key="user_youtube_link",
                                           )
-        st.session_state.got_transcript = return_transcript(user_youtube_link)
+        # st.session_state.got_transcript = return_transcript(user_youtube_link)
 
         left, right = st.columns([11,2], gap="small", vertical_alignment="center")
         
