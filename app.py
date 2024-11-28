@@ -6,6 +6,7 @@ from apps.test_app.main import other_app
 import time
 from init import init_routine
 
+
 # 0 Secrets
 pw_kahoot = st.secrets.PW_KAHOOT
 pw_other = st.secrets.PW_OTHER
