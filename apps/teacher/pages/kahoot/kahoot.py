@@ -83,7 +83,7 @@ if st.session_state.questions_generated == False:
     with left:
         st.subheader("A: Text einfügen", divider="violet", anchor=False)
         # User Text eingefügt
-        user_text = st.text_area("Text hier einfügen:", height=68, placeholder=example_text)
+        user_text = st.text_area("Text hier einfügen:", height=95, placeholder=example_text)
         st.session_state.user_text = user_text
 
     with right:
@@ -94,14 +94,19 @@ if st.session_state.questions_generated == False:
                                           )
         st.session_state.got_transcript = return_transcript(user_youtube_link)
 
-        # print("API Call: ", st.session_state.got_transcript)
-        if st.session_state.got_transcript == False:
-            st.write("")    
-        elif st.session_state.got_transcript:
-            st.success("Untertitel gefunden ✅")
-            st.session_state.user_text = st.session_state.got_transcript
-        elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
-            st.error("Keine Untertitel verfügbar ❌")
+        left, right = st.columns([11,2], gap="small", vertical_alignment="center")
+        
+        with left:
+            # print("API Call: ", st.session_state.got_transcript)
+            if st.session_state.got_transcript == False:
+                st.write("")    
+            elif st.session_state.got_transcript:
+                st.success("Untertitel gefunden ✅")
+                st.session_state.user_text = st.session_state.got_transcript
+            elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
+                st.error("Keine Untertitel verfügbar ❌")
+
+        right.button(":material/check:")
 
     num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
 
