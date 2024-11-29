@@ -88,7 +88,7 @@ if st.session_state.questions_generated == False:
 
     with right:
         st.subheader("B: Link einfügen", divider="green", anchor=False) 
-        st.write("Bald wieder")           
+        st.write("Bald wieder verfügbar... 🚧")           
     #     user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
     #                                       placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
     #                                       key="user_youtube_link",
