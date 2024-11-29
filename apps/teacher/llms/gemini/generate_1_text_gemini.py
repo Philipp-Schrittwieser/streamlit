@@ -31,7 +31,7 @@ def generate_1_text_gemini(model_name, topic):
     format = "{'properties': {'title': 'Themenüberschrift', 'content': 'Text über das Thema...'}}"
     
     prompt = f"""Erstelle einen strukturierten Lesetext zum Thema {topic} für SchülerInnen, die 14 Jahre alt sind.
-    Antworte im JSON-Format mit dieser Struktur: {format} Nutze Markdown für die Formatierung."""
+    Antworte im JSON-Format mit GENAU dieser Struktur: {format} Nutze Markdown für die Formatierung."""
 
     print("prompt", prompt)
     

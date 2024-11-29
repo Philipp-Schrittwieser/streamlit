@@ -36,7 +36,7 @@ def generate_2_qas_gemini(model_name, input_text, number_questions):
     model = genai.GenerativeModel(model_name)
     
     prompt = f"""Erstelle eine Liste von {number_questions} Frage-Antwort-Paaren im strukturierten Format für den folgenden Text: {input_text}
-    Antworte im JSON-Format mit dieser Struktur: {format}"""
+    Antworte im JSON-Format mit GENAU dieser Struktur: {format}"""
 
     print("prompt", prompt)
 
