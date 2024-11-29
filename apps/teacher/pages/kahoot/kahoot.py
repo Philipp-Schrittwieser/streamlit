@@ -88,7 +88,7 @@ if st.session_state.questions_generated == False:
 
     with right:
         st.subheader("B: Link einfügen", divider="green", anchor=False) 
-        st.write("Bald wieder verfügbar 🚧")           
+        st.write("Bald wieder")           
     #     user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
     #                                       placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
     #                                       key="user_youtube_link",
@@ -114,7 +114,8 @@ if st.session_state.questions_generated == False:
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
         time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
-        ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
+        # ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
+        ai_model = st.selectbox("KI-Modell", ["Genius AI"], index=0)
 
     st.write("")
 
