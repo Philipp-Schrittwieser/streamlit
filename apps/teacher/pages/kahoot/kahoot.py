@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from apps.teacher.pages.kahoot.example_text import example_text
-from apps.teacher.llms.gpt.generate_quiz_gpt import generate_quiz_gpt
+# from apps.teacher.llms.gpt.generate_quiz_gpt import generate_quiz_gpt
 from apps.teacher.llms.gemini.generate_quiz_gemini import generate_quiz_gemini
 # from apps.teacher.webscraping.return_transcript import return_transcript
 from apps.teacher.reset_apps import reset_apps
@@ -47,7 +47,8 @@ def generate_questions(user_text, num_questions, time_limit, ai_model):
 
     with st.spinner(''):
         if ai_model == "Open Creator":
-            llm_resp = generate_quiz_gpt(user_text, num_questions, time_limit)
+            # llm_resp = generate_quiz_gpt(user_text, num_questions, time_limit)
+            pass
         elif ai_model == "Genius AI":
             llm_resp = generate_quiz_gemini(user_text, num_questions, time_limit)
         else:
@@ -88,7 +89,7 @@ if st.session_state.questions_generated == False:
 
     with right:
         st.subheader("B: Link einfügen", divider="green", anchor=False) 
-        st.write("Bald wieder verfügbar... 🚧")           
+        st.write("Gerade im Umbau... 🚧")           
     #     user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
     #                                       placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
     #                                       key="user_youtube_link",
@@ -114,8 +115,8 @@ if st.session_state.questions_generated == False:
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
         time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
-        ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
-        # ai_model = st.selectbox("KI-Modell", ["Genius AI"], index=0)
+        # ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
+        ai_model = st.selectbox("KI-Modell", ["Genius AI"], index=0)
 
     st.write("")
 

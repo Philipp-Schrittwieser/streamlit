@@ -1,7 +1,7 @@
 streamlit==1.40.0
 pandas==2.2.3
 pydantic==2.9.2
-openai==1.54.4
+# openai==1.54.4
 pandas==2.2.3
 st_tailwind==1.0.5
 google-generativeai==0.8.3
