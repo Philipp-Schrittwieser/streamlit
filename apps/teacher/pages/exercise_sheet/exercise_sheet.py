@@ -82,6 +82,7 @@ def restart_exercise_sheet():
   st.session_state.qas = []
   st.session_state.fragen = ""
   st.session_state.lösungen = ""
+  st.session_state.ai_model = "Genius AI"
   st.rerun()
 
 
@@ -147,7 +148,7 @@ if st.session_state.exercise_sheet_level == "1_text":
 
   with left:
     st.subheader("A: Text einfügen", divider="violet", anchor=False)
-    topic_text = st.text_area("Text hier einfügen:", placeholder=example_text, height=68, max_chars=60000)
+    topic_text = st.text_area("Text hier einfügen:", placeholder=example_text, height=95, max_chars=60000)
     st.write("")
     st.session_state.response = topic_text
 
@@ -171,6 +172,10 @@ if st.session_state.exercise_sheet_level == "1_text":
       st.subheader("B: Text generieren", divider="green", anchor=False)
       st.write("Text generieren lassen:")
 
+      with st.expander("Erweiterte Einstellungen"):
+        #dropdown für KI-Modelle
+        st.session_state.ai_model = st.selectbox("KI-Modell", ["Genius AI", "Genius AI Pro"])
+
       if st.button(label="Lesetext generieren :material/laps:", key="button-blue2", use_container_width=True):
         
         if st.session_state.topic == "":
@@ -181,12 +186,15 @@ if st.session_state.exercise_sheet_level == "1_text":
           show_generate_popup("Lesetext")
 
           with st.spinner(''):
-            ai_model = "Genius AI"
-            if ai_model == "Max Creator":
+            selected_ai_model = st.session_state.ai_model
+
+            if selected_ai_model == "Max Creator":
               # response = generate_1_text_gpt(topic)
               pass
-            elif ai_model == "Genius AI":
-              response = generate_1_text_gemini(topic)
+            elif selected_ai_model == "Genius AI":
+              response = generate_1_text_gemini(model_name="gemini-1.5-flash", topic=topic)
+            elif selected_ai_model == "Genius AI Pro":
+              response = generate_1_text_gemini(model_name="gemini-1.5-pro", topic=topic)
             else:
               st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
               
@@ -199,6 +207,8 @@ elif st.session_state.exercise_sheet_level == "2_qas":
 
   st.write("Dein Lesetext ist im Dropdown-Menü verfügbar. Klicke jetzt auf den Button darunter, um Aufgaben und Lösungen zu deinem Text zu erstellen.")
 
+  number_questions = st.selectbox("Anzahl zu generierender Fragen", [3, 5, 7, 10, 12, 15, 20, 25, 30, 40], index=3)
+
   with st.expander("Lesetext hier ansehen"):
     st.write(st.session_state.response)
 
@@ -209,13 +219,15 @@ elif st.session_state.exercise_sheet_level == "2_qas":
       show_generate_popup("Aufgaben und Lösungen")
 
       with st.spinner(''):
-        ai_model = "Genius AI"
-        if ai_model == "Max Creator":
+        selected_ai_model = st.session_state.ai_model
+
+        if selected_ai_model == "Max Creator":
           # qas = generate_2_qas_gpt(st.session_state.response)
           pass
-        elif ai_model == "Genius AI":
-          qas = generate_2_qas_gemini(st.session_state.response)
-          pass
+        elif selected_ai_model == "Genius AI":
+          qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions)
+        elif selected_ai_model == "Genius AI Pro":
+          qas = generate_2_qas_gemini(model_name="gemini-1.5-pro", input_text=st.session_state.response, number_questions=number_questions)
         else:
           st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
         

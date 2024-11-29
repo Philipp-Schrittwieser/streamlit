@@ -39,7 +39,7 @@ if "response" not in st.session_state:
 if "topic" not in st.session_state:
     st.session_state.topic = ""
 
-def generate_questions(user_text, num_questions, time_limit, ai_model):
+def generate_questions(ai_model, user_text, num_questions, time_limit):
     st.success("Generiere Fragen... ⛏️")
     st.toast(f"KI generiert Fragen... 💡")
     time.sleep(1)
@@ -50,7 +50,11 @@ def generate_questions(user_text, num_questions, time_limit, ai_model):
             # llm_resp = generate_quiz_gpt(user_text, num_questions, time_limit)
             pass
         elif ai_model == "Genius AI":
-            llm_resp = generate_quiz_gemini(user_text, num_questions, time_limit)
+            llm_resp = generate_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
+        elif ai_model == "Genius AI Pro":
+            # Das klappt nicht gut
+            # llm_resp = generate_quiz_gemini(model_name="gemini-1.5-pro", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
+            pass
         else:
             st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
         st.session_state.response = llm_resp
@@ -111,12 +115,13 @@ if st.session_state.questions_generated == False:
 
         # right.button(":material/check:")
 
-    num_questions = st.selectbox("Anzahl zu generierende Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
+    num_questions = st.selectbox("Anzahl zu generierender Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
         time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
+        ai_model = "Genius AI"
         # ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
-        ai_model = st.selectbox("KI-Modell", ["Genius AI"], index=0)
+        # ai_model = st.selectbox("KI-Modell", ["Genius AI", "Genius AI Pro"], index=0)
 
     st.write("")
 
@@ -167,7 +172,7 @@ if st.session_state.questions_generated == False:
                 st.error(f"Bitte unter **{max_text_length:,}".replace(",", ".") + " Zeichen** :warning: halten")
                 
             else:
-                generate_questions(user_text, num_questions, time_limit, ai_model)
+                generate_questions(ai_model, user_text, num_questions, time_limit)
                 st.session_state.user_text = user_text
 
 # Ergebnis Tab

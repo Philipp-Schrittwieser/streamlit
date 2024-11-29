@@ -1,7 +1,7 @@
 from pydantic import BaseModel, __version__ as pydantic_version
 import google.generativeai as genai
 import streamlit as st
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import pandas as pd
 import json
 
@@ -13,7 +13,7 @@ genai.configure(api_key=google_api_key)
 class QuizQuestion(BaseModel):
     number: int
     question: str
-    answers: list[str]
+    answers: list[str] = Field(..., min_items=4, max_items=4)  # Genau 4 Antworten
     time_limit: int
     correct_answer: int
 
@@ -21,17 +21,22 @@ class QuizQuestions(BaseModel):
     questions: list[QuizQuestion]
 
 # Funktion zur Generierung von Quizfragen
-def generate_quiz_gemini(content, num_questions=10, num_seconds=60, model_name='gemini-1.5-flash'):
+def generate_quiz_gemini(model_name, user_text, num_questions, time_limit):
+    print("model_name", model_name)
+    print("user_text", user_text)
+    print("num_questions", num_questions)
+    print("time_limit", time_limit)
+
     model = genai.GenerativeModel(model_name)
     
-    prompt = f"Erstelle {num_questions} Quizfragen zum folgenden Inhalt. Das Zeitlimit ist immer {num_seconds} Sekunden und die korrekte Antwort ist 1, 2, 3 oder 4: {content}. Bitte Antworte als JSON-Format mit folgender Struktur: {QuizQuestions.model_json_schema()}"
+    prompt = f"Erstelle {num_questions} Quizfragen zum folgenden Inhalt. Das Zeitlimit ist immer {time_limit} Sekunden und die korrekte Antwort ist 1, 2, 3 oder 4: {user_text}. Bitte Antworte als JSON-Format mit GENAU folgender Struktur: {QuizQuestions.model_json_schema()}"
     
     response = model.generate_content(prompt)
     
     # Zugriff auf den Text-Inhalt
     response_text = response.text
 
-    # print(response_text)
+    print(f"response_text: {response_text}")
 
     # Bereinige den JSON-String
     response_text = response.text.strip()
@@ -41,12 +46,12 @@ def generate_quiz_gemini(content, num_questions=10, num_seconds=60, model_name='
         response_text = response_text[:-4]
     response_text = response_text.strip()
 
-    # print(response_text)
+    print(f"response_text: {response_text}")
 
     # Parse JSON-String
     quiz_data = json.loads(response_text)
 
-    # print(quiz_data)
+    print(f"quiz_data: {quiz_data}")
 
     # Verwende die tatsächlichen Fragen
     questions = [

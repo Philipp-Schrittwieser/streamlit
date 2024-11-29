@@ -8,21 +8,36 @@ import json
 google_api_key = st.secrets.GOOGLE_API_KEY
 genai.configure(api_key=google_api_key)
 
+
 class StructuredText(BaseModel):
     content: str
 
 # Funktion zur Generierung eines strukturierten Lesetextes
-def generate_1_text_gemini(topic, model_name='gemini-1.5-flash'):
-    model = genai.GenerativeModel(model_name)
+def generate_1_text_gemini(model_name, topic):
+
+    print("model_name_1_text_gemini", model_name)
+
+    # Create the model
+    generation_config = {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 40,
+        "max_output_tokens": 8192,
+        "response_mime_type": "text/plain",
+    }
+    model = genai.GenerativeModel(model_name=model_name, generation_config=generation_config)
+
+    # Das funktioniert viel besser als das komplexe Schema und auch für beide Modelle
+    format = "{'properties': {'title': 'Themenüberschrift', 'content': 'Text über das Thema...'}}"
     
     prompt = f"""Erstelle einen strukturierten Lesetext zum Thema {topic} für SchülerInnen, die 14 Jahre alt sind.
-    Antworte im JSON-Format mit dieser Struktur: {StructuredText.model_json_schema()}"""
+    Antworte im JSON-Format mit dieser Struktur: {format} Nutze Markdown für die Formatierung."""
 
-    # print("prompt", prompt)
+    print("prompt", prompt)
     
     response = model.generate_content(prompt)
 
-    # print("response", response)
+    print("response", response)
 
     response_text = response.text.strip()
     
@@ -36,9 +51,10 @@ def generate_1_text_gemini(topic, model_name='gemini-1.5-flash'):
     
     # JSON parsen
     text_data = json.loads(response_text)
-    # print("text_data", text_data)
+    print("text_data", text_data)
    
-    content = text_data['properties']['content']['content']
-    # print("content", content)
+    content = text_data['properties']['content']
+    
+    print("content", content)
     
     return content

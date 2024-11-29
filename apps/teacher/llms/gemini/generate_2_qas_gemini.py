@@ -8,6 +8,8 @@ import json
 google_api_key = st.secrets.GOOGLE_API_KEY
 genai.configure(api_key=google_api_key)
 
+
+## Class funktioniert nicht so gut, vor allem für mehrere Modelle
 class QuestionAnswerPair(BaseModel):
     question_answer_pair_number: int
     question: str
@@ -17,11 +19,24 @@ class QuestionAnswerPairs(BaseModel):
     question_answer_pairs: list[QuestionAnswerPair]
 
 # Funktion zur Generierung von Frage-Antwort-Paaren
-def generate_2_qas_gemini(input_text, model_name='gemini-1.5-flash'):
+def generate_2_qas_gemini(model_name, input_text, number_questions):
+    print("model_name_2_qas_gemini", model_name)
+
+    # Format entsprechend der QuestionAnswerPairs Klasse
+    format = """{
+        "question_answer_pairs": [
+            {
+                "question_answer_pair_number": 1,
+                "question": "Beispielfrage?",
+                "answer": "Beispielantwort"
+            }
+        ]
+    }"""
+        
     model = genai.GenerativeModel(model_name)
     
-    prompt = f"""Erstelle eine Liste von mindestens 10! Frage-Antwort-Paaren im strukturierten Format für den folgenden Text: {input_text}
-    Antworte im JSON-Format mit dieser Struktur: {QuestionAnswerPairs.model_json_schema()}"""
+    prompt = f"""Erstelle eine Liste von {number_questions} Frage-Antwort-Paaren im strukturierten Format für den folgenden Text: {input_text}
+    Antworte im JSON-Format mit dieser Struktur: {format}"""
 
     print("prompt", prompt)
 
