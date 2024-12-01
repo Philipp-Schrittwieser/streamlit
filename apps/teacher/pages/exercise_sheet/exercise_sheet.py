@@ -193,14 +193,25 @@ if st.session_state.exercise_sheet_level == "1_text":
               pass
             elif selected_ai_model == "Genius AI":
               response = generate_1_text_gemini(model_name="gemini-1.5-flash", topic=topic)
+
             elif selected_ai_model == "Genius AI Pro":
               response = generate_1_text_gemini(model_name="gemini-1.5-pro", topic=topic)
+              
+              if response == "error": 
+                print("Trying again with flash model")
+                response = generate_1_text_gemini(model_name="gemini-1.5-flash", topic=topic)
+
             else:
               st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
               
-            st.session_state.response = response
-            st.session_state.exercise_sheet_level = "2_qas"
-            show_finish_popup()
+            if response != "error":
+              st.session_state.response = response
+              st.session_state.exercise_sheet_level = "2_qas"
+              show_finish_popup()
+
+            else:
+              st.error("Fehler beim Generieren. :exclamation: Bitte versuche es erneut - eventuell mit einem anderen Thema...")
+              st.button("Ok")
 
 elif st.session_state.exercise_sheet_level == "2_qas":
   st.subheader("2. Aufgaben und Lösungen erstellen...", divider="violet", anchor=False)
@@ -226,14 +237,25 @@ elif st.session_state.exercise_sheet_level == "2_qas":
           pass
         elif selected_ai_model == "Genius AI":
           qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions)
+
         elif selected_ai_model == "Genius AI Pro":
           qas = generate_2_qas_gemini(model_name="gemini-1.5-pro", input_text=st.session_state.response, number_questions=number_questions)
+
+          if qas == "error":
+            print("Trying again with flash model")
+            qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions)
+
         else:
           st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
         
-        st.session_state.qas = qas
-        st.session_state.exercise_sheet_level = "3_answers"
-        show_finish_popup()
+        if qas != "error":
+          st.session_state.qas = qas
+          st.session_state.exercise_sheet_level = "3_answers"
+          show_finish_popup()
+
+        else:
+          st.error("Fehler beim Generieren. :exclamation: Bitte versuche es erneut...")
+          st.button("Ok")
 
 elif st.session_state.exercise_sheet_level == "3_answers":
   st.subheader("3. Alle Unterlagen herunterladen...", divider="green", anchor=False)

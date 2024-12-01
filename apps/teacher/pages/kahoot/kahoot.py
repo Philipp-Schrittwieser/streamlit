@@ -57,12 +57,17 @@ def generate_questions(ai_model, user_text, num_questions, time_limit):
             pass
         else:
             st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
-        st.session_state.response = llm_resp
-        st.session_state.questions_generated = True
-        # st.success("Fertig generiert 🎉🎉🎉")
-        st.balloons()
-        time.sleep(0.75)
-        st.rerun()
+
+        if llm_resp != "error":
+            st.session_state.response = llm_resp
+            st.session_state.questions_generated = True
+            # st.success("Fertig generiert 🎉🎉🎉")
+            st.balloons()
+            time.sleep(0.75)
+            st.rerun()
+        else:
+            st.error("Fehler beim Generieren. :exclamation: Bitte versuche es erneut - eventuell mit einem anderen Text/Video...")
+            st.button("Ok")
 
 def restart_kahoot():
     st.session_state.questions_generated = False
