@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from apps.teacher.pages.kahoot.example_text import example_text
 # from apps.teacher.llms.gpt.generate_quiz_gpt import generate_quiz_gpt
-from apps.teacher.llms.gemini.generate_quiz_gemini import generate_quiz_gemini
+from apps.teacher.llms.gemini.generate_0_quiz_gemini import generate_0_quiz_gemini
 # from apps.teacher.webscraping.return_transcript import return_transcript
 from apps.teacher.reset_apps import reset_apps
 from helpers import return_current_pagename
@@ -12,7 +12,7 @@ from st_copy_to_clipboard import st_copy_to_clipboard
 import time
 from io import StringIO, BytesIO
 
-st.title("Kahoot Testgenerator💡", anchor=False)
+st.title("Kahoot Generator💡", anchor=False)
 
 if 'questions_generated' not in st.session_state:
     st.session_state.questions_generated = False
@@ -46,19 +46,21 @@ def generate_questions(ai_model, user_text, num_questions, time_limit):
     st.toast("Bitte warte einen kurzen Moment ⏰ ")
 
     with st.spinner(''):
+
+        # Generieren
         if ai_model == "Open Creator":
             # llm_resp = generate_quiz_gpt(user_text, num_questions, time_limit)
             pass
         elif ai_model == "Genius AI":
-            llm_resp = generate_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
+            llm_resp, llm_error = generate_0_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
         elif ai_model == "Genius AI Pro":
-            # Das klappt nicht gut
-            # llm_resp = generate_quiz_gemini(model_name="gemini-1.5-pro", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
-            pass
+            # nur zur Sicherheit als Umleitung auf Flash, falls Pro aus irgendeinem Grund noch im Session State ist
+            llm_resp = generate_0_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
         else:
             st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
 
-        if llm_resp != "error":
+        # Error Handling
+        if llm_error == False:
             st.session_state.response = llm_resp
             st.session_state.questions_generated = True
             # st.success("Fertig generiert 🎉🎉🎉")
@@ -70,7 +72,6 @@ def generate_questions(ai_model, user_text, num_questions, time_limit):
             st.button("Ok")
 
 def restart_kahoot():
-    st.session_state.questions_generated = False
     st.toast("App wird neu gestartet... 🏁")
     time.sleep(0.5)
     reset_apps()

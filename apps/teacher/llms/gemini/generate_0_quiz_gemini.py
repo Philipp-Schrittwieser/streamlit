@@ -21,7 +21,7 @@ class QuizQuestions(BaseModel):
     questions: list[QuizQuestion]
 
 # Funktion zur Generierung von Quizfragen
-def generate_quiz_gemini(model_name, user_text, num_questions, time_limit):
+def generate_0_quiz_gemini(model_name, user_text, num_questions, time_limit):
     print("model_name", model_name)
     print("user_text", user_text)
     print("num_questions", num_questions)
@@ -81,12 +81,12 @@ def generate_quiz_gemini(model_name, user_text, num_questions, time_limit):
             for q in questions
         ])
 
-        return df
+        return df, False
     
     except Exception as e:
         print("Error", e)
         print("model_name_generate_quiz_gemini", model_name)
-        return "error"
+        return "error", True
 
 
 # # Beispielaufruf

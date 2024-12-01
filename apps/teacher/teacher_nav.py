@@ -22,25 +22,36 @@ def teacher_nav():
         st.write("")
         one, two = st.columns([6, 4])
 
-        if one.button("**Kahoot Quiz von Text** ✍️ - Excel", use_container_width=True, key="kahoot_text"):
+        if one.button("**Kahoot Quiz** 💡 - Excel", use_container_width=True, key="kahoot_text"):
             st.session_state.show_selection_page = False
             st.session_state.selected_page = "apps/teacher/pages/kahoot/kahoot.py"
             st.rerun()
 
-        elif one.button("**Kahoot Quiz von YouTube** 🎥 - Excel", use_container_width=True, key="kahoot_youtube"):
-            st.session_state.show_selection_page = False
-            st.session_state.selected_page = "apps/teacher/pages/kahoot/kahoot.py"
-            st.rerun()
+        # elif one.button("**Kahoot Quiz von YouTube** 🎥 - Excel", use_container_width=True, key="kahoot_youtube"):
+        #     st.session_state.show_selection_page = False
+        #     st.session_state.selected_page = "apps/teacher/pages/kahoot/kahoot.py"
+        #     st.rerun()
 
-        elif one.button("**Arbeitsblatt von Text** ✍️ - Word", use_container_width=True, key="exercise_sheet_text"):
+        elif one.button("**Arbeitsblatt** 📝 - Word", use_container_width=True, key="exercise_sheet_text"):
             st.session_state.show_selection_page = False
             st.session_state.selected_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
             st.rerun()
 
-        elif one.button("**Arbeitsblatt generiert** 📝 - Word", use_container_width=True, key="exercise_sheet_generated"):
+        # elif one.button("**Arbeitsblatt generiert** 📝 - Word", use_container_width=True, key="exercise_sheet_generated"):
+        #     st.session_state.show_selection_page = False
+        #     st.session_state.selected_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
+        #     st.rerun()
+
+        elif one.button("**Grammatik Übung** 🔎 - Word", use_container_width=True, key="grammar_exercise"):
             st.session_state.show_selection_page = False
-            st.session_state.selected_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
+            st.session_state.selected_page = "apps/teacher/pages/grammar_exercise/grammar_exercise.py"
             st.rerun()
+
+        elif one.button("**Lernspiele** 🧩 - Konzepte", use_container_width=True, key="learning_game"):
+            st.session_state.show_selection_page = False
+            st.session_state.selected_page = "apps/teacher/pages/learning_games/learning_games.py"
+            st.rerun()
+
 
     if st.session_state.show_selection_page:
         show_selection_page()
@@ -48,13 +59,21 @@ def teacher_nav():
     else:
         # Visible Pages
         visible_pages = {
-            "Erstelle ein...": [
+            "Üben & Prüfen...": [
                 st.Page("apps/teacher/pages/kahoot/kahoot.py",
                         title="Kahoot Quiz",
                         icon="💡"),
                 st.Page("apps/teacher/pages/exercise_sheet/exercise_sheet.py",
                         title="Arbeitsblatt",
-                        icon="📝")
+                        icon="📝"),
+                st.Page("apps/teacher/pages/grammar_exercise/grammar_exercise.py",
+                        title="Grammatik Übung",
+                        icon="🔎")
+            ],
+            "Lernen & Spaß...": [
+                st.Page("apps/teacher/pages/learning_games/learning_games.py",
+                        title="Lernspiele",
+                        icon="🧩")
             ],
             "Sonstiges...": [
                 st.Page("apps/teacher/pages/about_us/about_us.py",

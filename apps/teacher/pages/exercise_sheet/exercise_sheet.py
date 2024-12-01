@@ -4,8 +4,7 @@ import pandas as pd
 from apps.teacher.llms.gemini.generate_1_text_gemini import generate_1_text_gemini
 from apps.teacher.llms.gemini.generate_2_qas_gemini import generate_2_qas_gemini
 from apps.teacher.reset_apps import reset_apps
-import io
-from docx import Document
+from apps.teacher.create_documents.create_word import create_document_for_genius_ai, create_combined__exercise_document, format_questions_and_answers
 from apps.teacher.pages.kahoot.example_text import example_text
 
 # st.subheader("1️⃣. Lesetext mit KI generieren")
@@ -32,64 +31,12 @@ def show_restart_popup():
   st.toast("App wird neu gestartet... 🏁")
   time.sleep(0.5)
 
-def add_formatted_text(doc, text):
-    lines = text.split('\n')
-    current_paragraph = None
-    
-    for line in lines:
-        line = line.strip()  # Entfernt Leerzeichen am Anfang und Ende
-        if not line:  # Ignoriert leere Zeilen
-            continue
-        
-        if line.startswith('# '):
-            heading = doc.add_heading(level=1)
-            add_formatted_run(heading, line[2:])
-            current_paragraph = None
-        elif line.startswith('## '):
-            heading = doc.add_heading(level=2)
-            add_formatted_run(heading, line[3:])
-            current_paragraph = None
-        elif line.startswith('### '):
-            heading = doc.add_heading(level=3)
-            add_formatted_run(heading, line[4:])
-            current_paragraph = None
-        elif line.startswith('#### '):
-            heading = doc.add_heading(level=4)
-            add_formatted_run(heading, line[5:])
-            current_paragraph = None
-        elif line.startswith('- ') or line.startswith('•\t'):
-            p = doc.add_paragraph(style='List Bullet')
-            add_formatted_run(p, line[2:])
-            current_paragraph = None
-        else:
-            if current_paragraph is None:
-                current_paragraph = doc.add_paragraph()
-            else:
-                current_paragraph.add_run('\n')  # Fügt einen Zeilenumbruch innerhalb des Absatzes hinzu
-            add_formatted_run(current_paragraph, line)
-
-def add_formatted_run(paragraph, text):
-    parts = text.split('**')
-    for i, part in enumerate(parts):
-        run = paragraph.add_run(part)
-        if i % 2 == 1:  # Ungerade Indizes sind fett gedruckt
-            run.bold = True
-
-def restart_exercise_sheet():
-  st.session_state.exercise_sheet_level = "1_text"
-  st.session_state.topic = ""
-  st.session_state.response = ""
-  st.session_state.qas = []
-  st.session_state.fragen = ""
-  st.session_state.lösungen = ""
-  st.session_state.ai_model = "Genius AI"
-  st.rerun()
-
 
 ## Setzt bei Wechsel alles zurück
 if st.session_state.current_page != "apps/teacher/pages/exercise_sheet/exercise_sheet.py":    
   reset_apps()
   st.session_state.current_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
+
 
 if "exercise_sheet_level" not in st.session_state:
   st.session_state.exercise_sheet_level = "1_text"
@@ -108,7 +55,8 @@ left.title("Arbeitsblatt Generator 📝", anchor=False)
 if st.session_state.exercise_sheet_level == "2_qas":
   if right.button(":material/arrow_back:", use_container_width=False):
     show_restart_popup()
-    restart_exercise_sheet()
+    reset_apps()
+    st.rerun()
 
 st.text("")
 
@@ -266,39 +214,36 @@ elif st.session_state.exercise_sheet_level == "3_answers":
     st.write(st.session_state.response)
   
   with st.expander("Generierte Aufgaben"):
-    fragen = f"## {st.session_state.topic} - Aufgaben:\n\n"
-    lösungen = f"## {st.session_state.topic} - Lösungen:\n\n"
-
+ 
     for i, qa in enumerate(st.session_state.qas, 1):
       st.markdown(f"### **{i}. {qa['question']}**")
       st.markdown(f"{qa['answer']}")
 
-      fragen += f"### **{i}. {qa['question']}**\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n"
-      st.session_state.fragen = fragen
-      lösungen += f"### **{i}. {qa['question']}**\n\n{qa['answer']}\n\n"
-      st.session_state.lösungen = lösungen
+    fragen, lösungen = format_questions_and_answers(st.session_state.topic, st.session_state.qas)
+    
+    st.session_state.fragen = fragen
+    st.session_state.lösungen = lösungen
 
-  def create_document(content, filename):
-      doc = Document()
-      add_formatted_text(doc, content)
-      bio = io.BytesIO()
-      doc.save(bio)
-      return bio, filename
 
-  lesetext_bio, lesetext_filename = create_document(st.session_state.response, f"{st.session_state.topic}_Lesetext.docx")
-  fragen_bio, fragen_filename = create_document(st.session_state.fragen, f"{st.session_state.topic}_Fragen.docx")
-  lösungen_bio, lösungen_filename = create_document(st.session_state.lösungen, f"{st.session_state.topic}_Lösungen.docx")
 
-  combined_doc = Document()
-  add_formatted_text(combined_doc, st.session_state.response)
-  combined_doc.add_page_break()
-  add_formatted_text(combined_doc, st.session_state.fragen)
-  combined_doc.add_page_break()
-  add_formatted_text(combined_doc, st.session_state.lösungen)
-  combined_bio = io.BytesIO()
-  combined_doc.save(combined_bio)
+  lesetext_filename = f"{st.session_state.topic}_Lesetext.docx"
+  lesetext_bio = create_document_for_genius_ai(st.session_state.response)
+
+  fragen_filename = f"{st.session_state.topic}_Fragen.docx"
+  fragen_bio = create_document_for_genius_ai(st.session_state.fragen)
+
+  lösungen_filename = f"{st.session_state.topic}_Lösungen.docx"
+  lösungen_bio = create_document_for_genius_ai(st.session_state.lösungen)
+
+
+  combined_bio = create_combined__exercise_document(
+    st.session_state.response,
+    st.session_state.fragen,
+    st.session_state.lösungen
+  )
 
   with st.expander("Einzelne Dokumente"):
+    st.write("Hier kannst du die Dokumente einzeln herunterladen:")
     one, two, three = st.columns(3)
 
     one.download_button(
@@ -340,4 +285,8 @@ elif st.session_state.exercise_sheet_level == "3_answers":
   with right:
     if st.button(label="Neu starten :material/restart_alt:", use_container_width=True):
       show_restart_popup()
-      restart_exercise_sheet()
+      reset_apps()
+      st.rerun()
+
+  # if st.button("Ok"):
+  #   st.rerun()
