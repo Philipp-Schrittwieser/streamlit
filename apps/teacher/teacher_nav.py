@@ -42,7 +42,7 @@ def teacher_nav():
         #     st.session_state.selected_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
         #     st.rerun()
 
-        elif one.button("**Grammatik Übung** 🔎 - Word", use_container_width=True, key="grammar_exercise"):
+        elif one.button("**Grammatik Übung** 🔎 - Word", use_container_width=True, key="grammar_exercise", ):
             st.session_state.show_selection_page = False
             st.session_state.selected_page = "apps/teacher/pages/grammar_exercise/grammar_exercise.py"
             st.rerun()
@@ -59,7 +59,7 @@ def teacher_nav():
     else:
         # Visible Pages
         visible_pages = {
-            "Üben & Prüfen...": [
+            "Dokumente erstellen...": [
                 st.Page("apps/teacher/pages/kahoot/kahoot.py",
                         title="Kahoot Quiz",
                         icon="💡"),
@@ -70,7 +70,7 @@ def teacher_nav():
                         title="Grammatik Übung",
                         icon="🔎")
             ],
-            "Lernen & Spaß...": [
+            "Ideen sammeln...": [
                 st.Page("apps/teacher/pages/learning_games/learning_games.py",
                         title="Lernspiele",
                         icon="🧩")

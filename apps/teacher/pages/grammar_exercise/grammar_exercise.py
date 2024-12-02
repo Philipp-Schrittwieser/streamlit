@@ -46,9 +46,9 @@ def generate_grammar_exercises(ai_model, topic, number_exercises, exercise_type,
         "Gemischte Übungen": f"first {exercises_per_section} Exercise is to fill in the blank and listing the verb in brackets, second {exercises_per_section} Exercise is to correct answers, next {exercises_per_section} Exercise is to form statements, next {exercises_per_section} Exercises is to write negations and last Exercise is {exercises_per_section} exercises is to ask questions for the school subject {language} and write in {language} !!!",
         "Lückentext": f"Exercise is ONLY to fill in the blank and listing the verb in brackets for the school subject {language} and write in {language} !!!",
         "Fehler ausbessern": f"Exercise is ONLY to correct answers for the school subject {language} and write in {language} !!!",
-        "Statement": f"Exercise is ONLY to form statements for the school subject {language} and write in {language} !!!",
-        "Verneinung": f"Exercise is ONLY to form negations for the school subject {language} and write in {language} !!!",
-        "Frage": f"Exercise is ONLY to form questions for the school subject {language} and write in {language} !!!"
+        "Statements": f"Exercise is ONLY to form statements for the school subject {language} and write in {language} !!!",
+        "Verneinungen": f"Exercise is ONLY to form negations for the school subject {language} and write in {language} !!!",
+        "Fragen": f"Exercise is ONLY to form questions for the school subject {language} and write in {language} !!!"
     }
     
     exercise_prompt = exercise_prompts[exercise_type]
@@ -75,7 +75,7 @@ if st.session_state.grammar_exercise_level == "1_create":
   grammar_topic = st.text_input("Schwerpunkt eintippen:", placeholder="z.B. Present Simple")
   st.session_state.grammar_topic = grammar_topic
 
-  st.session_state.exercises_type = st.selectbox("Übungstyp auswählen:", ["Gemischte Übungen", "Lückentext", "Fehler ausbessern", "Statement", "Verneinung", "Frage"], index=0)
+  st.session_state.exercises_type = st.selectbox("Übungstyp auswählen:", ["Gemischte Übungen", "Lückentext", "Fehler ausbessern", "Statements", "Verneinungen", "Fragen"], index=0)
 
   with st.expander("Erweiterte Einstellungen"):
     st.session_state.number_exercises = st.selectbox("Anzahl der Aufgaben", [5, 10, 15, 20, 25, 30], index=1)
