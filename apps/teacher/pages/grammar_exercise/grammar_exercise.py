@@ -9,6 +9,7 @@ if st.session_state.current_page != "apps/teacher/pages/grammar_exercise/grammar
   reset_apps()
   st.session_state.current_page = "apps/teacher/pages/grammar_exercise/grammar_exercise.py"
 
+
 if not "response1" in st.session_state:
     st.session_state.response1 = []
 
@@ -30,6 +31,31 @@ if not "grammar_exercise_level" in st.session_state:
 if not "choice" in st.session_state:
     st.session_state.choice = None
 
+def generate_grammar_exercises(ai_model, topic, number_exercises, exercise_type, language):
+    """
+    Bereitet den Prompt vor und generiert Grammatikübungen
+    """
+    # Set AI model
+    selected_model = "gemini-1.5-flash" if ai_model == "Genius AI" else "gemini-1.5-pro"
+    
+    # Calculate exercises per section
+    exercises_per_section = number_exercises / 5
+    
+    # Define exercise prompts
+    exercise_prompts = {
+        "Gemischte Übungen": f"first {exercises_per_section} Exercise is to fill in the blank and listing the verb in brackets, second {exercises_per_section} Exercise is to correct answers, next {exercises_per_section} Exercise is to form statements, next {exercises_per_section} Exercises is to write negations and last Exercise is {exercises_per_section} exercises is to ask questions for the school subject {language} and write in {language} !!!",
+        "Lückentext": f"Exercise is ONLY to fill in the blank and listing the verb in brackets for the school subject {language} and write in {language} !!!",
+        "Fehler ausbessern": f"Exercise is ONLY to correct answers for the school subject {language} and write in {language} !!!",
+        "Statement": f"Exercise is ONLY to form statements for the school subject {language} and write in {language} !!!",
+        "Verneinung": f"Exercise is ONLY to form negations for the school subject {language} and write in {language} !!!",
+        "Frage": f"Exercise is ONLY to form questions for the school subject {language} and write in {language} !!!"
+    }
+    
+    exercise_prompt = exercise_prompts[exercise_type]
+    
+    # Generate exercises
+    return generate_3_grammar_gemini(selected_model, topic, number_exercises, exercise_prompt)
+
 
 left, right = st.columns([15, 1], gap="small", vertical_alignment="center")
 
@@ -45,80 +71,73 @@ if st.session_state.grammar_exercise_level == "1_create":
   st.subheader("Übung erstellen...", divider="blue", anchor=False)
   st.write("Hier kannst du eine Grammatikübung erstellen, die du dann als Word herunterladen kannst.")
 
-  st.selectbox("Fach auswählen:", ["🇩🇪 Deutsch", "🇬🇧 English", "🇫🇷 Französisch", "🇪🇸 Spanisch", "🇮🇹 Italienisch", "🇻🇦 Latein"], index=1)
+  st.session_state.grammar_language = st.selectbox("Fach auswählen:", ["🇩🇪 Deutsch", "🇬🇧 English", "🇫🇷 Französisch", "🇪🇸 Spanisch", "🇮🇹 Italienisch", "🇻🇦 Latein"], index=1)
 
-  grammar_topic = st.text_input("Schwerpunkt eintippen:", placeholder="z.B. Present Simple", value="Present Simple")
+  grammar_topic = st.text_input("Schwerpunkt eintippen:", placeholder="z.B. Present Simple")
   st.session_state.grammar_topic = grammar_topic
 
-  exercises_type = st.selectbox("Übungstyp auswählen:", ["Gemischte Übungen", "Lückentext"], index=0)
-  st.session_state.exercises_type = exercises_type
+  st.session_state.exercises_type = st.selectbox("Übungstyp auswählen:", ["Gemischte Übungen", "Lückentext", "Fehler ausbessern", "Statement", "Verneinung", "Frage"], index=0)
 
   with st.expander("Erweiterte Einstellungen"):
+    st.session_state.number_exercises = st.selectbox("Anzahl der Aufgaben", [5, 10, 15, 20, 25, 30], index=1)
     st.session_state.ai_model = st.selectbox("KI-Modell", ["Genius AI", "Genius AI Pro"])
-    st.session_state.number_exercises = st.selectbox("Anzahl der Aufgaben", [5, 10, 15, 20, 25, 30], index=2)
+
 
   if st.button("Übung generieren :material/laps:"):
       with st.spinner(''):
-          selected_ai_model = st.session_state.ai_model
-          if selected_ai_model == "Genius AI":
-              selected_ai_model = "gemini-1.5-flash"
-          else:
-              selected_ai_model = "gemini-1.5-pro"
-
-          with ThreadPoolExecutor() as executor:
-              number_one_part = st.session_state.number_exercises / 5
-              if st.session_state.exercises_type == "Gemischte Übungen":
-                  exercises_type = f"first {number_one_part} Exercises should be fill in the blank and listing the verb in brackets, second {number_one_part} exercises should be correct answers, next {number_one_part} exercises should be  forming statements, next {number_one_part} exercises should be asking questions and last {number_one_part} exercises should be writing negations."
-              else:
-                  exercises_type = f"Exercises should be fill in the blank and listing the verb in brackets."
-
-              future1 = executor.submit(generate_3_grammar_gemini, selected_ai_model, st.session_state.grammar_topic, st.session_state.number_exercises, exercises_type)
-              future2 = executor.submit(generate_3_grammar_gemini, selected_ai_model, st.session_state.grammar_topic, st.session_state.number_exercises, exercises_type)
-              st.session_state.response1 = future1.result()
-              st.session_state.response2 = future2.result()
-
-          st.session_state.grammar_exercise_level = "2_show"
-          st.rerun()
+        st.session_state.response1 = generate_grammar_exercises(st.session_state.ai_model, st.session_state.grammar_topic, st.session_state.number_exercises, st.session_state.exercises_type, st.session_state.grammar_language)
+        st.session_state.grammar_exercise_level = "2_show"
+        st.rerun()
 
 if st.session_state.grammar_exercise_level == "2_show":
-    st.header("Übung auswählen...", divider="violet", anchor=False)
-    st.write("Hier siehst du zwei Vorschläge für deine Grammatikübung. Wähle den, der dir besser gefällt.")
+    st.header("Übung prüfen...", divider="violet", anchor=False)
+    st.write("Hier siehst du einen Vorschlag für deine Grammatikübung. Wenn du zufrieden bist, klicke auf 'Auswählen' ansonsten auf 'Neu generieren'.")
     
     if st.session_state.response1 != "error" and st.session_state.response2 != "error":
         
-        left, right = st.columns(2, gap="medium")
+        left, right = st.columns([1, 1], gap="medium")
 
         with left:
-            if st.button("Wähle A :material/arrow_right_alt:", use_container_width=True, key="choice_A_top"):
+            if st.button("Auswählen :material/arrow_right_alt:", use_container_width=True, key="choice_A_top"):
                 st.session_state.grammar_exercise_level = "3_download"
                 st.session_state.choice = "A"
                 st.rerun()
-            with st.container(border=True):
-                st.subheader("Vorschlag A", divider=True, anchor=False)
-                for i, pair in enumerate(st.session_state.response1, 1):
-                    st.write(f"**{i}. {pair['exercise']}**")
-                    st.write(f"{pair['solution']}")
-
-                if st.button("Wähle A :material/arrow_right_alt:", use_container_width=True, key="choice_A_bottom"):
-                    st.session_state.grammar_exercise_level = "3_download"
-                    st.session_state.choice = "A"
-                    st.rerun()
 
         with right:
-            if st.button("Wähle B :material/arrow_right_alt:", use_container_width=True, key="choice_B_top"):
-                st.session_state.grammar_exercise_level = "3_download"
-                st.session_state.choice = "B"
-                st.rerun()
-            with st.container(border=True):
-                st.subheader("Vorschlag B", divider=True, anchor=False)
-                for i, pair in enumerate(st.session_state.response2, 1):
-                    st.write(f"**{i}. {pair['exercise']}**")
-                    st.write(f"{pair['solution']}")
-
-                if st.button("Wähle B :material/arrow_right_alt:", use_container_width=True, key="choice_B_bottom"):
-                    st.session_state.grammar_exercise_level = "3_download"
-                    st.session_state.choice = "B"
+            if st.button("Neu generieren :material/laps:", use_container_width=True, key="choice_B_top"):
+                with st.spinner(''):
+                    st.session_state.response1 = generate_grammar_exercises(st.session_state.ai_model, st.session_state.grammar_topic, st.session_state.number_exercises, st.session_state.exercises_type, st.session_state.grammar_language)
+                    st.session_state.grammar_exercise_level = "2_show"
                     st.rerun()
+
+        with st.container(border=True):
+            st.subheader("Generierte Übung", divider=True, anchor=False)
+            for i, pair in enumerate(st.session_state.response1, 1):
+                st.write(f"{i}. {pair['exercise']}")
+                # st.write(f"{pair['solution']}")
+
+        # if st.button("Wähle A :material/arrow_right_alt:", use_container_width=True, key="choice_A_bottom"):
+        #     st.session_state.grammar_exercise_level = "3_download"
+        #     st.session_state.choice = "A"
+        #     st.rerun()
+
+        # st.write("######")
+
+        # if st.button("Wähle B :material/arrow_right_alt:", use_container_width=True, key="choice_B_top"):
+        #     st.session_state.grammar_exercise_level = "3_download"
+        #     st.session_state.choice = "B"
+        #     st.rerun()
+
+        # with st.container(border=True):
+        #     st.subheader("Vorschlag B", divider=True, anchor=False)
+        #     for i, pair in enumerate(st.session_state.response2, 1):
+        #         st.write(f"{i}. {pair['exercise']}")
+        #         # st.write(f"{pair['solution']}")
+
+        #     if st.button("Wähle B :material/arrow_right_alt:", use_container_width=True, key="choice_B_bottom"):
+        #         st.session_state.grammar_exercise_level = "3_download"
+        #         st.session_state.choice = "B"
+        #         st.rerun()
 
     else:
         st.error("Fehler beim Generieren. :exclamation: Bitte versuche es erneut - eventuell mit einem anderen Schwerpunkt...")
@@ -135,7 +154,8 @@ if st.session_state.grammar_exercise_level == "3_download":
                 st.write(f"**{i}. {pair['exercise']}**")
                 st.write(f"{pair['solution']}")
             
-            exercises, solutions = format_questions_and_answers(st.session_state.grammar_topic, st.session_state.response1)
+            lines = "\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n"
+            exercises, solutions = format_questions_and_answers(st.session_state.grammar_topic, st.session_state.response1, lines)
 
         else:
 

@@ -27,7 +27,7 @@ def generate_3_grammar_gemini(model_name, grammar_topic, number_exercises, exerc
     try:    
         model = genai.GenerativeModel(model_name)
         
-        prompt = f"""Create a list of {number_exercises} Exercises and Solutions in structured format for the following grammar topic: {grammar_topic}
+        prompt = f"""Create a list of {number_exercises} Exercises and Solutions in structured format to practise EXACTLY the: {grammar_topic}
         Answer in JSON format with EXACTLY this structure: {format} {exercises_type}"""
 
         print("prompt", prompt)
@@ -36,7 +36,7 @@ def generate_3_grammar_gemini(model_name, grammar_topic, number_exercises, exerc
 
         response_text = response.text.strip()
 
-        print("response_text", response_text)
+        # print("response_text", response_text)
         
         # JSON-String bereinigen
         if response_text.startswith('```json'):
@@ -49,7 +49,7 @@ def generate_3_grammar_gemini(model_name, grammar_topic, number_exercises, exerc
         # JSON parsen
         exercise_data = json.loads(response_text)
 
-        print("exercise_data", exercise_data)
+        # print("exercise_data", exercise_data)
         
         # Antwortdaten extrahieren und zurückgeben
         list_exercises = []

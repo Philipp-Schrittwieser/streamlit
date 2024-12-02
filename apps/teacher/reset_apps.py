@@ -29,3 +29,8 @@ def reset_apps():
   st.session_state.number_exercises = 10
   st.session_state.grammar_exercise_level = "1_create"
   st.session_state.choice = None
+
+  # 4. Learning Games
+  st.session_state.ai_model = ""
+  st.session_state.game_ideas = ""
+  st.session_state.learning_game_level = "1_create"

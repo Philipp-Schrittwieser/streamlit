@@ -113,7 +113,7 @@ def create_combined_grammar_document(exercises, solutions):
     return bio
 
 
-def format_questions_and_answers(topic, qa_pairs):
+def format_questions_and_answers(topic, qa_pairs, lines):
     """
     Formatiert Fragen und Antworten für Word/Streamlit
     
@@ -131,8 +131,17 @@ def format_questions_and_answers(topic, qa_pairs):
         question = qa.get("question") or qa.get("exercise") 
         answer = qa.get("answer") or qa.get("solution")
 
-        # Format für Word-Dokument
-        fragen += f"### **{i}. {question}**\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n"
+        # Bei Gaptext brauch ich keine Antwortzeile ("____")
+        # Das u200B ist in Word ein leeres Zeichen (sieht man nicht)
+        # "\n\n" springt in die nächste Zeile
+        # Wenn 3 "___" hintereinander vorkommen, dann ist es wsl von den Blanks aus den Übungen
+        
+        if "___" in question:
+            question = question.replace("___", "_________")
+            fragen += f"### **{i}. {question}**\n\n\u200B\n\n"
+            
+        # Wenn nicht halte dich an die Lines
+        else: fragen += f"### **{i}. {question}**{lines}"
         lösungen += f"### **{i}. {question}**\n\n{answer}\n\n"
 
     return fragen, lösungen

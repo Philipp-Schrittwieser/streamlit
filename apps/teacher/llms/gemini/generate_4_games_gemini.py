@@ -9,8 +9,12 @@ google_api_key = st.secrets.GOOGLE_API_KEY
 genai.configure(api_key=google_api_key)
 
 # Funktion zur Generierung von Frage-Antwort-Paaren
-def generate_4_games_gemini(model_name, topic):
+def generate_4_games_gemini(model_name, topic, game_type):
 
+    if game_type != "Allgemein":
+        add_game_type = f" und der Fokus liegt auf {game_type}."
+    else:
+        add_game_type = ""
 
     try:    
         model = genai.GenerativeModel(model_name)
@@ -18,7 +22,7 @@ def generate_4_games_gemini(model_name, topic):
         # Das funktioniert viel besser als das komplexe Schema und auch für beide Modelle
         format = "{'content': ['name': 'Name des Spiels', 'description': 'Kurze Beschreibung des Spiels']}"
         
-        prompt = f"""Gib mir richtig coole und lustige Ideen für Lernspiele, die keine Vorbereitung erfordern und meine 14 Jährigen SuS richtig Spaß machen zum Thema: {topic}. Antworte im JSON-Format mit GENAU dieser Struktur: {format}"""
+        prompt = f"""Gib mir richtig coole und lustige Ideen für Lernspiele, die keine Vorbereitung erfordern und meine 14 Jährigen SuS richtig Spaß machen zum Thema: {topic} {add_game_type}. Antworte im JSON-Format mit GENAU dieser Struktur: {format}"""
 
         print("prompt", prompt)
 

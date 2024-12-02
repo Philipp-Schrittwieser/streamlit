@@ -219,7 +219,8 @@ elif st.session_state.exercise_sheet_level == "3_answers":
       st.markdown(f"### **{i}. {qa['question']}**")
       st.markdown(f"{qa['answer']}")
 
-    fragen, lösungen = format_questions_and_answers(st.session_state.topic, st.session_state.qas)
+    lines = "\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n_________________________________________________________________________________________________________\n\n\u200B\n\n"
+    fragen, lösungen = format_questions_and_answers(st.session_state.topic, st.session_state.qas, lines)
     
     st.session_state.fragen = fragen
     st.session_state.lösungen = lösungen
