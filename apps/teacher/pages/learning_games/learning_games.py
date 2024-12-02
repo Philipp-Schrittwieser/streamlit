@@ -40,7 +40,7 @@ st.write("Die KI hat da ein paar Ideen, um Lernen abwechslungsreicher zu gestalt
 
 if st.session_state.learning_game_level == "1_create":
 
-  st.session_state.game_topic = st.text_input("Was du deinen SuS beibringen möchtest:", placeholder="z.B. Vokabeln lernen", value="Vokabeln lernen")
+  st.session_state.game_topic = st.text_input("Was du deinen SuS beibringen möchtest:", placeholder="z.B. Vokabeln lernen")
 
   st.session_state.game_type = st.selectbox("Worauf du den Fokus legen willst:", ["Allgemein", "Team-Spiele", "Einzelnarbeit", "Quiz", "Bewegung", "Schreiben", "Sprechen", "Zuhören", "Rollenspiele", "Simulation"], index=0)
 
