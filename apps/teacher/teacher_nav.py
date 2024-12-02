@@ -42,10 +42,11 @@ def teacher_nav():
         #     st.session_state.selected_page = "apps/teacher/pages/exercise_sheet/exercise_sheet.py"
         #     st.rerun()
 
-        elif one.button("**Grammatik Übung** 🔎 - Word", use_container_width=True, key="grammar_exercise", ):
-            st.session_state.show_selection_page = False
-            st.session_state.selected_page = "apps/teacher/pages/grammar_exercise/grammar_exercise.py"
-            st.rerun()
+        # GRÄMMÄR
+        # elif one.button("**Grammatik Übung** 🔎 - Word", use_container_width=True, key="grammar_exercise", ):
+        #     st.session_state.show_selection_page = False
+        #     st.session_state.selected_page = "apps/teacher/pages/grammar_exercise/grammar_exercise.py"
+        #     st.rerun()
 
         elif one.button("**Lernspiele** 🧩 - Konzepte", use_container_width=True, key="learning_game"):
             st.session_state.show_selection_page = False
@@ -66,9 +67,10 @@ def teacher_nav():
                 st.Page("apps/teacher/pages/exercise_sheet/exercise_sheet.py",
                         title="Arbeitsblatt",
                         icon="📝"),
-                st.Page("apps/teacher/pages/grammar_exercise/grammar_exercise.py",
-                        title="Grammatik Übung",
-                        icon="🔎")
+                # GRÄMMÄR
+                # st.Page("apps/teacher/pages/grammar_exercise/grammar_exercise.py",
+                #         title="Grammatik Übung",
+                #         icon="🔎")
             ],
             "Ideen sammeln...": [
                 st.Page("apps/teacher/pages/learning_games/learning_games.py",
