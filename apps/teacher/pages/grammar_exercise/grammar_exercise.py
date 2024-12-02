@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from apps.teacher.create_documents.create_word import create_document_for_genius_ai, create_combined_grammar_document, format_questions_and_answers
 from apps.teacher.reset_apps import reset_apps
 from apps.teacher.llms.gemini.generate_3_grammar_gemini import generate_3_grammar_gemini
-
+from apps.teacher.animations import show_generate, show_generate_finished, show_restart_app, show_donwload_completed
 ## Setzt bei Wechsel alles zurück
 if st.session_state.current_page != "apps/teacher/pages/grammar_exercise/grammar_exercise.py":    
   reset_apps()
@@ -63,9 +63,8 @@ left.title("Grammatik Übung Generator 🔎")
 
 if st.session_state.grammar_exercise_level == "2_show":
   if right.button(":material/arrow_back:", use_container_width=False):
-    # show_restart_popup()
     reset_apps()
-    st.rerun()
+    show_restart_app()
 
 if st.session_state.grammar_exercise_level == "1_create":
   st.subheader("Übung erstellen...", divider="blue", anchor=False)
@@ -85,14 +84,16 @@ if st.session_state.grammar_exercise_level == "1_create":
 
   if st.button("Übung generieren :material/laps:"):
       with st.spinner(''):
+        show_generate("Grammatikübung")
         st.session_state.response1 = generate_grammar_exercises(st.session_state.ai_model, st.session_state.grammar_topic, st.session_state.number_exercises, st.session_state.exercises_type, st.session_state.grammar_language)
         st.session_state.grammar_exercise_level = "2_show"
-        st.rerun()
+        show_generate_finished()
 
 if st.session_state.grammar_exercise_level == "2_show":
     st.header("Übung prüfen...", divider="violet", anchor=False)
     st.write("Hier siehst du einen Vorschlag für deine Grammatikübung. Wenn du zufrieden bist, klicke auf 'Auswählen' ansonsten auf 'Neu generieren'.")
-    
+    st.write("######")
+
     if st.session_state.response1 != "error" and st.session_state.response2 != "error":
         
         left, right = st.columns([1, 1], gap="medium")
@@ -108,7 +109,7 @@ if st.session_state.grammar_exercise_level == "2_show":
                 with st.spinner(''):
                     st.session_state.response1 = generate_grammar_exercises(st.session_state.ai_model, st.session_state.grammar_topic, st.session_state.number_exercises, st.session_state.exercises_type, st.session_state.grammar_language)
                     st.session_state.grammar_exercise_level = "2_show"
-                    st.rerun()
+                    show_generate_finished()
 
         with st.container(border=True):
             st.subheader("Generierte Übung", divider=True, anchor=False)
@@ -202,9 +203,10 @@ if st.session_state.grammar_exercise_level == "3_download":
 
     left, right = st.columns(2, gap="medium")
 
-    left.download_button("Gesamtes Dokument herunterladen :material/download:", data=combined_bio.getvalue(), file_name=combined_filename, use_container_width=True)
+    if left.download_button("Gesamtes Dokument herunterladen :material/download:", data=combined_bio.getvalue(), file_name=combined_filename, use_container_width=True):
+        show_donwload_completed("Dokument")
 
     if right.button("Neu starten :material/restart_alt:", use_container_width=True):
         reset_apps()
-        st.rerun()
+        show_restart_app()
 

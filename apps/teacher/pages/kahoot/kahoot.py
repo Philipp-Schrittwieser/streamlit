@@ -11,6 +11,7 @@ import uuid
 from st_copy_to_clipboard import st_copy_to_clipboard
 import time
 from io import StringIO, BytesIO
+from apps.teacher.animations import show_generate, show_generate_finished, show_donwload_completed, show_restart_app
 
 st.title("Kahoot Generator💡", anchor=False)
 
@@ -40,10 +41,7 @@ if "topic" not in st.session_state:
     st.session_state.topic = ""
 
 def generate_questions(ai_model, user_text, num_questions, time_limit):
-    st.success("Generiere Fragen... ⛏️")
-    st.toast(f"KI generiert Fragen... 💡")
-    time.sleep(1)
-    st.toast("Bitte warte einen kurzen Moment ⏰ ")
+    show_generate("Fragen")
 
     with st.spinner(''):
 
@@ -63,19 +61,14 @@ def generate_questions(ai_model, user_text, num_questions, time_limit):
         if llm_error == False:
             st.session_state.response = llm_resp
             st.session_state.questions_generated = True
-            # st.success("Fertig generiert 🎉🎉🎉")
-            st.balloons()
-            time.sleep(0.75)
-            st.rerun()
+            show_generate_finished()
         else:
             st.error("Fehler beim Generieren. :exclamation: Bitte versuche es erneut - eventuell mit einem anderen Text/Video...")
             st.button("Ok")
 
 def restart_kahoot():
-    st.toast("App wird neu gestartet... 🏁")
-    time.sleep(0.5)
     reset_apps()
-    st.rerun()
+    show_restart_app()
 
 ## Setzt bei Wechsel alles zurück
 if st.session_state.current_page != "apps/teacher/pages/kahoot/kahoot.py":
@@ -233,9 +226,7 @@ if st.session_state.questions_generated == True:
         key="button-blue2",
         use_container_width=True
     ):
-        st.toast("Fragen wurden heruntergeladen ✅ ")
-        time.sleep(1)
-        st.toast("Du kannst sie dir rechts oben im Browser ansehen! 🌎")
+        show_donwload_completed("Fragen")
         
     # Neustart Button
     if col2.button(

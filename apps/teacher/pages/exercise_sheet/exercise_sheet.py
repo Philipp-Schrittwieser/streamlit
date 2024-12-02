@@ -6,30 +6,15 @@ from apps.teacher.llms.gemini.generate_2_qas_gemini import generate_2_qas_gemini
 from apps.teacher.reset_apps import reset_apps
 from apps.teacher.create_documents.create_word import create_document_for_genius_ai, create_combined__exercise_document, format_questions_and_answers
 from apps.teacher.pages.kahoot.example_text import example_text
-
+from apps.teacher.animations import show_generate, show_donwload_completed, show_restart_app
 # st.subheader("1️⃣. Lesetext mit KI generieren")
 # st.subheader("2️⃣. Fragen mit KI generieren (Schüler)")
 # st.subheader("3️⃣. Antworten mit KI generieren (Lehrer)")
-
-def show_generate_popup(type):
-  st.success(f"Generiere {type}... ⛏️")
-  st.toast(f"KI generiert {type}... 💡")
-  time.sleep(1)
-  st.toast("Bitte warte einen kurzen Moment ⏰ ")
 
 def show_finish_popup():
   st.balloons()
   time.sleep(0.75)
   st.rerun()
-
-def show_download_popup(type):
-  st.toast(f"{type} wurde heruntergeladen ✅ ")
-  time.sleep(1)
-  st.toast("Du kannst es dir rechts oben im Browser ansehen! 🌎")
-
-def show_restart_popup():
-  st.toast("App wird neu gestartet... 🏁")
-  time.sleep(0.5)
 
 
 ## Setzt bei Wechsel alles zurück
@@ -54,9 +39,8 @@ left.title("Arbeitsblatt Generator 📝", anchor=False)
 
 if st.session_state.exercise_sheet_level == "2_qas":
   if right.button(":material/arrow_back:", use_container_width=False):
-    show_restart_popup()
     reset_apps()
-    st.rerun()
+    show_restart_app()
 
 st.text("")
 
@@ -131,7 +115,7 @@ if st.session_state.exercise_sheet_level == "1_text":
           st.error("Bitte Thema eingeben :exclamation:")
 
         else:
-          show_generate_popup("Lesetext")
+          show_generate("Lesetext")
 
           with st.spinner(''):
             selected_ai_model = st.session_state.ai_model
@@ -175,7 +159,7 @@ elif st.session_state.exercise_sheet_level == "2_qas":
 
   with left:
     if st.button(label="Aufgaben generieren :material/laps:", key="button-blue", use_container_width=True):
-      show_generate_popup("Aufgaben und Lösungen")
+      show_generate("Aufgaben und Lösungen")
 
       with st.spinner(''):
         selected_ai_model = st.session_state.ai_model
@@ -281,13 +265,12 @@ elif st.session_state.exercise_sheet_level == "3_answers":
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         use_container_width=True
     ):
-      show_download_popup("Dokument")
+      show_donwload_completed("Dokument")
 
   with right:
     if st.button(label="Neu starten :material/restart_alt:", use_container_width=True):
-      show_restart_popup()
       reset_apps()
-      st.rerun()
+      show_restart_app()
 
   # if st.button("Ok"):
   #   st.rerun()

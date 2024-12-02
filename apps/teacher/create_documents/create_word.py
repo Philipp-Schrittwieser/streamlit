@@ -137,9 +137,9 @@ def format_questions_and_answers(topic, qa_pairs, lines):
         # Wenn 3 "___" hintereinander vorkommen, dann ist es wsl von den Blanks aus den Übungen
         
         if "___" in question:
-            question = question.replace("___", "_________")
+            question = question.replace("___", "__________")
             fragen += f"### **{i}. {question}**\n\n\u200B\n\n"
-            
+
         # Wenn nicht halte dich an die Lines
         else: fragen += f"### **{i}. {question}**{lines}"
         lösungen += f"### **{i}. {question}**\n\n{answer}\n\n"
