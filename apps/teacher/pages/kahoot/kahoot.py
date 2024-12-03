@@ -79,13 +79,6 @@ if st.session_state.questions_generated == False:
     st.subheader("Text einfügen und Quiz generieren...", divider="blue", anchor=False)
     st.write("Unterhalb kannst du einen Text einfügen aus dem Fragen generiert werden sollen.")
 
-    with st.expander("Quiz aus YouTube-Video generieren"):
-        st.subheader("Quiz aus YouTube-Video generieren:", divider="violet", anchor=False)
-        st.write("Wenn du mit den SuS ein YouTube-Video anschauen willst und dann daraus Fragen generieren willst, empfehlen wir dir, aus dem Video die Untertitel zu extrahieren und dann in unser Tool unterhalb einzufügen: [www.youtube-transcript.io](https://www.youtube-transcript.io/) 🔗")
-        st.write("Hier findest du eine kurze Video-Anleitung dazu:")
-        st.video("https://youtu.be/mvq3y7GtocU")
-
-
     # left, mid, right = st.columns([6,1,6], gap="small")
 
     # with left:
@@ -124,6 +117,12 @@ if st.session_state.questions_generated == False:
 
 
     num_questions = st.selectbox("Anzahl zu generierender Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
+
+    with st.expander("Quiz aus YouTube-Video generieren"):
+        st.subheader("Quiz aus YouTube-Video generieren:", divider="violet", anchor=False)
+        st.write("Wenn du mit den SuS ein YouTube-Video anschauen willst und dann daraus Fragen generieren willst, empfehlen wir dir, aus dem Video die Untertitel zu extrahieren und dann in unser Tool unterhalb einzufügen: [www.youtube-transcript.io](https://www.youtube-transcript.io/) 🔗")
+        st.write("Hier findest du eine kurze Video-Anleitung dazu:")
+        st.video("https://youtu.be/mvq3y7GtocU")
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
         
