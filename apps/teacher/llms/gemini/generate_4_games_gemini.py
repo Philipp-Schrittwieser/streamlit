@@ -11,6 +11,8 @@ genai.configure(api_key=google_api_key)
 # Funktion zur Generierung von Frage-Antwort-Paaren
 def generate_4_games_gemini(model_name, topic, game_type):
 
+    print("model_name", model_name)
+    
     if game_type != "Allgemein":
         add_game_type = f" und der Fokus liegt auf {game_type}."
     else:

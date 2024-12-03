@@ -34,3 +34,4 @@ def reset_apps():
   st.session_state.ai_model = ""
   st.session_state.game_ideas = ""
   st.session_state.learning_game_level = "1_create"
+  st.session_state.random_index = None

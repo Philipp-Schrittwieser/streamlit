@@ -120,7 +120,7 @@ if st.session_state.questions_generated == False:
 
     with st.expander("Quiz aus YouTube-Video generieren"):
         st.subheader("Quiz aus YouTube-Video generieren:", divider="violet", anchor=False)
-        st.write("Wenn du mit den SuS ein YouTube-Video anschauen willst und dann daraus Fragen generieren willst, empfehlen wir dir, aus dem Video die Untertitel zu extrahieren und dann in unser Tool unterhalb einzufügen: [www.youtube-transcript.io](https://www.youtube-transcript.io/) 🔗")
+        st.write("Wenn du mit den SuS ein YouTube-Video anschauen willst, kannst du daraus auch Fragen generieren. Wir empfehlen dir die Untertitel zu extrahieren und dann in unser Tool einzufügen. Zum Extrahieren nutze diesen Link: [www.youtube-transcript.io](https://www.youtube-transcript.io/) 🔗")
         st.write("Hier findest du eine kurze Video-Anleitung dazu:")
         st.video("https://youtu.be/mvq3y7GtocU")
 
