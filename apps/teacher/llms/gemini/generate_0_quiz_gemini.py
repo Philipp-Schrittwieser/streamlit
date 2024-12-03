@@ -21,17 +21,25 @@ class QuizQuestions(BaseModel):
     questions: list[QuizQuestion]
 
 # Funktion zur Generierung von Quizfragen
-def generate_0_quiz_gemini(model_name, user_text, num_questions, time_limit):
+def generate_0_quiz_gemini(model_name, user_text, num_questions, time_limit, difficulty):
     print("model_name", model_name)
-    print("user_text", user_text)
-    print("num_questions", num_questions)
-    print("time_limit", time_limit)
-
+    # print("user_text", user_text)
+    # print("num_questions", num_questions)
+    # print("time_limit", time_limit)
+    # print("difficulty", difficulty)
     try:
+
+        add_difficulty = ""
+        if difficulty == "Schwer":
+            add_difficulty = "SCHWIERIGE"
+        elif difficulty == "Mittel":
+            add_difficulty = ""
+        elif difficulty == "Leicht":
+            add_difficulty = "LEICHTE"
 
         model = genai.GenerativeModel(model_name)
         
-        prompt = f"Erstelle {num_questions} Quizfragen zum folgenden Inhalt. Das Zeitlimit ist immer {time_limit} Sekunden und die korrekte Antwort ist 1, 2, 3 oder 4: {user_text}. Bitte Antworte als JSON-Format mit GENAU folgender Struktur: {QuizQuestions.model_json_schema()}"
+        prompt = f"Erstelle {num_questions} {add_difficulty} Quizfragen zum folgenden Inhalt. Das Zeitlimit ist immer {time_limit} Sekunden und die korrekte Antwort ist 1, 2, 3 oder 4: {user_text}. Bitte Antworte als JSON-Format mit GENAU folgender Struktur: {QuizQuestions.model_json_schema()}"
         
         response = model.generate_content(prompt)
         

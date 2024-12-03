@@ -8,10 +8,9 @@ from apps.teacher.reset_apps import reset_apps
 from helpers import return_current_pagename
 from db.db import new_kahoot
 import uuid
-from st_copy_to_clipboard import st_copy_to_clipboard
-import time
 from io import StringIO, BytesIO
 from apps.teacher.animations import show_generate, show_generate_finished, show_donwload_completed, show_restart_app
+from apps.teacher.webscraping.scraping import scrape_youtube_transcript
 
 st.title("Kahoot Generator💡", anchor=False)
 
@@ -40,7 +39,7 @@ if "response" not in st.session_state:
 if "topic" not in st.session_state:
     st.session_state.topic = ""
 
-def generate_questions(ai_model, user_text, num_questions, time_limit):
+def generate_questions(ai_model, user_text, num_questions, time_limi, difficulty):
     show_generate("Fragen")
 
     with st.spinner(''):
@@ -50,10 +49,10 @@ def generate_questions(ai_model, user_text, num_questions, time_limit):
             # llm_resp = generate_quiz_gpt(user_text, num_questions, time_limit)
             pass
         elif ai_model == "Genius AI":
-            llm_resp, llm_error = generate_0_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
+            llm_resp, llm_error = generate_0_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit, difficulty=difficulty)
         elif ai_model == "Genius AI Pro":
             # nur zur Sicherheit als Umleitung auf Flash, falls Pro aus irgendeinem Grund noch im Session State ist
-            llm_resp = generate_0_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit)
+            llm_resp, llm_error = generate_0_quiz_gemini(model_name="gemini-1.5-flash", user_text=user_text, num_questions=num_questions, time_limit=time_limit, difficulty=difficulty)
         else:
             st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")
 
@@ -78,47 +77,61 @@ if st.session_state.current_page != "apps/teacher/pages/kahoot/kahoot.py":
 # Generator Tab
 if st.session_state.questions_generated == False:
 
-    st.subheader("Text oder YouTube-Link einfügen...", divider="blue", anchor=False)
-    st.write("Möchtest du aus einem eingefügten Text (Möglichkeit A) oder einem YouTube-Video (Möglichkeit B) ein Kahoot erstellen? Für Option B müssen Untertitel beim Video vorhanden sein.")
-    st.write("Füge einen Text oder einen YouTube-Link ein und dann drücke auf Fragen generieren.")
+    st.subheader("Text einfügen und Quiz generieren...", divider="blue", anchor=False)
+    st.write("Unterhalb kannst du einen Text einfügen aus dem Fragen generiert werden sollen.")
 
-    left, mid, right = st.columns([6,1,6], gap="small")
+    with st.expander("Quiz aus YouTube-Video generieren"):
+        st.subheader("Quiz aus YouTube-Video generieren:", divider="violet", anchor=False)
+        st.write("Wenn du mit den SuS ein YouTube-Video anschauen willst und dann daraus Fragen generieren willst, empfehlen wir dir, aus dem Video die Untertitel zu extrahieren und dann in unser Tool unterhalb einzufügen: [www.youtube-transcript.io](https://www.youtube-transcript.io/) 🔗")
+        st.write("Hier findest du eine kurze Video-Anleitung dazu:")
+        st.video("https://youtu.be/n2KJqiSG7bs")
 
-    with left:
-        st.subheader("A: Text einfügen", divider="violet", anchor=False)
-        # User Text eingefügt
-        user_text = st.text_area("Text hier einfügen:", height=95, placeholder=example_text)
-        st.session_state.user_text = user_text
 
-    with right:
-        st.subheader("B: Link einfügen", divider="green", anchor=False) 
-        st.write("Gerade im Umbau... 🚧")           
+    # left, mid, right = st.columns([6,1,6], gap="small")
+
+    # with left:
+    # st.subheader("A: Text einfügen", divider="violet", anchor=False)
+    # User Text eingefügt
+    user_text = st.text_area("Text hier einfügen:", height=95, placeholder=example_text)
+    st.session_state.user_text = user_text
+
+    # with right:
+    #     st.subheader("B: Link einfügen", divider="green", anchor=False) 
+    #     st.write("Gerade im Umbau... 🚧")           
+
+        
     #     user_youtube_link = st.text_input("YouTube-Link hier einfügen:",
     #                                       placeholder="z.B. https://www.youtube.com/watch?v=Nhw-t-RrWk8",
     #                                       key="user_youtube_link",
     #                                       )
-    #     # st.session_state.got_transcript = return_transcript(user_youtube_link)
-
-
-        # left, right = st.columns([11,2], gap="small", vertical_alignment="center")
         
-        # with left:
-        #     # print("API Call: ", st.session_state.got_transcript)
-        #     if st.session_state.got_transcript == False:
-        #         st.write("")    
-        #     elif st.session_state.got_transcript:
-        #         st.success("Untertitel gefunden ✅")
-        #         st.session_state.user_text = st.session_state.got_transcript
-        #     elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
-        #         st.error("Keine Untertitel verfügbar ❌")
+    #     if user_youtube_link != "":
+    #         st.session_state.got_transcript = scrape_youtube_transcript(user_youtube_link)
 
-        # right.button(":material/check:")
+
+    #     left, right = st.columns([11,2], gap="small", vertical_alignment="center")
+        
+    #     with left:
+    #         # print("API Call: ", st.session_state.got_transcript)
+    #         if st.session_state.got_transcript == False:
+    #             st.write("")    
+    #         elif st.session_state.got_transcript:
+    #             st.success("Untertitel gefunden ✅")
+    #             st.session_state.user_text = st.session_state.got_transcript
+    #         elif st.session_state.got_transcript == None and st.session_state.user_youtube_link != "":
+    #             st.error("Keine Untertitel verfügbar ❌")
+
+    #     right.button(":material/check:")
+
 
     num_questions = st.selectbox("Anzahl zu generierender Fragen", [5, 10, 15, 20, 25, 30, 35, 40], index=3)
 
     with st.expander("Erweiterte Einstellungen anzeigen"):
-        time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
+        
         ai_model = "Genius AI"
+        difficulty = st.selectbox("Schwierigkeitsgrad", ["Leicht", "Mittel", "Schwer"], index=1)
+        time_limit = st.selectbox("Zeitlimit in Sekunden", [15, 30, 60, 90, 120], index=1)
+
         # ai_model = st.selectbox("KI-Modell", ["Open Creator", "Genius AI"], index=1)
         # ai_model = st.selectbox("KI-Modell", ["Genius AI", "Genius AI Pro"], index=0)
 
@@ -171,7 +184,7 @@ if st.session_state.questions_generated == False:
                 st.error(f"Bitte unter **{max_text_length:,}".replace(",", ".") + " Zeichen** :warning: halten")
                 
             else:
-                generate_questions(ai_model, user_text, num_questions, time_limit)
+                generate_questions(ai_model, user_text, num_questions, time_limit, difficulty)
                 st.session_state.user_text = user_text
 
 # Ergebnis Tab

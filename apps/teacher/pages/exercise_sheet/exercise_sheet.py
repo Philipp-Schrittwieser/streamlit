@@ -151,6 +151,7 @@ elif st.session_state.exercise_sheet_level == "2_qas":
   st.write("Dein Lesetext ist im Dropdown-Menü verfügbar. Klicke jetzt auf den Button darunter, um Aufgaben und Lösungen zu deinem Text zu erstellen.")
 
   number_questions = st.selectbox("Anzahl zu generierender Fragen", [3, 5, 7, 10, 12, 15, 20, 25, 30, 40], index=3)
+  difficulty = st.selectbox("Schwierigkeitsgrad", ["Leicht", "Mittel", "Schwer"], index=1)
 
   with st.expander("Lesetext hier ansehen"):
     st.write(st.session_state.response)
@@ -168,14 +169,14 @@ elif st.session_state.exercise_sheet_level == "2_qas":
           # qas = generate_2_qas_gpt(st.session_state.response)
           pass
         elif selected_ai_model == "Genius AI":
-          qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions)
+          qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions, difficulty=difficulty)
 
         elif selected_ai_model == "Genius AI Pro":
-          qas = generate_2_qas_gemini(model_name="gemini-1.5-pro", input_text=st.session_state.response, number_questions=number_questions)
+          qas = generate_2_qas_gemini(model_name="gemini-1.5-pro", input_text=st.session_state.response, number_questions=number_questions, difficulty=difficulty)
 
           if qas == "error":
             print("Trying again with flash model")
-            qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions)
+            qas = generate_2_qas_gemini(model_name="gemini-1.5-flash", input_text=st.session_state.response, number_questions=number_questions, difficulty=difficulty)
 
         else:
           st.error("Kein gültiges KI-Modell ausgewählt :exclamation:")

@@ -19,9 +19,18 @@ class QuestionAnswerPairs(BaseModel):
     question_answer_pairs: list[QuestionAnswerPair]
 
 # Funktion zur Generierung von Frage-Antwort-Paaren
-def generate_2_qas_gemini(model_name, input_text, number_questions):
+def generate_2_qas_gemini(model_name, input_text, number_questions, difficulty):
 
     print("model_name_2_qas_gemini", model_name)
+
+    add_difficulty = ""
+    if difficulty == "Schwer":
+        add_difficulty = "SCHWIERIGEN"
+    elif difficulty == "Mittel":
+        add_difficulty = ""
+    elif difficulty == "Leicht":
+        add_difficulty = "LEICHTEN"
+
 
     # Format entsprechend der QuestionAnswerPairs Klasse
     format = """{
@@ -37,7 +46,7 @@ def generate_2_qas_gemini(model_name, input_text, number_questions):
     try:    
         model = genai.GenerativeModel(model_name)
         
-        prompt = f"""Erstelle eine Liste von {number_questions} Frage-Antwort-Paaren im strukturierten Format für den folgenden Text: {input_text}
+        prompt = f"""Erstelle eine Liste von {number_questions} {add_difficulty} Frage-Antwort-Paaren im strukturierten Format für den folgenden Text: {input_text}
         Antworte im JSON-Format mit GENAU dieser Struktur: {format}"""
 
         print("prompt", prompt)
