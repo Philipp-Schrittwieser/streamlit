@@ -10,7 +10,6 @@ from db.db import new_kahoot
 import uuid
 from io import StringIO, BytesIO
 from apps.teacher.animations import show_generate, show_generate_finished, show_donwload_completed, show_restart_app
-from apps.teacher.webscraping.scraping import scrape_youtube_transcript
 
 st.title("Kahoot Generator💡", anchor=False)
 
