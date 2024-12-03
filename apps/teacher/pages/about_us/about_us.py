@@ -1,4 +1,12 @@
 import streamlit as st
+from apps.teacher.reset_apps import reset_apps
+
+## Setzt bei Page-Wechsel alles zurück
+# Wenn er davor nicht auf der Seite war, App zurücksetzen
+if st.session_state.current_page != "apps/teacher/pages/about_us/about_us.py":    
+  reset_apps()
+  # Außerdem Seite, auf derzeitige Seite setzen
+  st.session_state.current_page = "apps/teacher/pages/about_us/about_us.py"
 
 st.title("Über uns 👥")
 

@@ -12,7 +12,6 @@ if st.session_state.current_page != "apps/teacher/pages/learning_games/learning_
   # Außerdem Seite, auf derzeitige Seite setzen
   st.session_state.current_page = "apps/teacher/pages/learning_games/learning_games.py"
 
-
 if "ai_model" not in st.session_state:
   st.session_state.ai_model = "Genius AI"
 
