@@ -73,18 +73,29 @@ def generate_0_quiz_gemini(model_name, user_text, num_questions, time_limit, dif
                 correct_answer=q['correct_answer']
             ) for q in quiz_data['questions']
         ]
+
+        def clean_tag(text):
+            text = str(text)
+            if '<' in text and '>' in text:
+                # Findet den Text zwischen < und >
+                import re
+                tag = re.search(r'<([^>]+)>', text)
+                if tag:
+                    # Ersetzt <tag> mit tag-tag und behält Rest des Texts
+                    return text.replace(f'<{tag.group(1)}>', f'{tag.group(1)}-Tag')
+            return text
         
         # Konvertierung in DataFrame
         df = pd.DataFrame([
             {
-                'Number': q.number,
-                'Question - max 120 characters': q.question,
-                'Answer 1 - max 75 characters': q.answers[0],
-                'Answer 2 - max 75 characters': q.answers[1],
-                'Answer 3 - max 75 characters': q.answers[2],
-                'Answer 4 - max 75 characters': q.answers[3],
-                'Time limit (sec) – 5, 10, 20, 30, 60, 90, 120, or 240 secs': q.time_limit,
-                'Correct answer(s) - choose at least one': q.correct_answer
+                'Number': clean_tag(str(q.number)),
+                'Question - max 120 characters': clean_tag(q.question),
+                'Answer 1 - max 75 characters': clean_tag(q.answers[0]), 
+                'Answer 2 - max 75 characters': clean_tag(q.answers[1]),
+                'Answer 3 - max 75 characters': clean_tag(q.answers[2]),
+                'Answer 4 - max 75 characters': clean_tag(q.answers[3]),
+                'Time limit (sec) – 5, 10, 20, 30, 60, 90, 120, or 240 secs': clean_tag(str(q.time_limit)),
+                'Correct answer(s) - choose at least one': clean_tag(str(q.correct_answer))
             }
             for q in questions
         ])
