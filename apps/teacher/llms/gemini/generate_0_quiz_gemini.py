@@ -74,15 +74,22 @@ def generate_0_quiz_gemini(model_name, user_text, num_questions, time_limit, dif
             ) for q in quiz_data['questions']
         ]
 
+        # def clean_tag(text):
+        #     text = str(text)
+        #     if '<' in text and '>' in text:
+        #         # Findet den Text zwischen < und >
+        #         import re
+        #         tag = re.search(r'<([^>]+)>', text)
+        #         if tag:
+        #             # Ersetzt <tag> mit tag-tag und behält Rest des Texts
+        #             return text.replace(f'<{tag.group(1)}>', f'{tag.group(1)}-Tag')
+        #     return text
+        
         def clean_tag(text):
             text = str(text)
-            if '<' in text and '>' in text:
-                # Findet den Text zwischen < und >
-                import re
-                tag = re.search(r'<([^>]+)>', text)
-                if tag:
-                    # Ersetzt <tag> mit tag-tag und behält Rest des Texts
-                    return text.replace(f'<{tag.group(1)}>', f'{tag.group(1)}-Tag')
+            # Ersetze < durch ⬅ (U+2B05) und > durch ➡ (U+27A1)
+            text = text.replace('<', '⬅ ')
+            text = text.replace('>', '➡')
             return text
         
         # Konvertierung in DataFrame
