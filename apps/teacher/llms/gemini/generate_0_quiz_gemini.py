@@ -89,7 +89,7 @@ def generate_0_quiz_gemini(model_name, user_text, num_questions, time_limit, dif
             text = str(text)
             # Ersetze < durch ⬅ (U+2B05) und > durch ➡ (U+27A1)
             text = text.replace('<', '⬅ ')
-            text = text.replace('>', '➡')
+            text = text.replace('>', ' ➡')
             return text
         
         # Konvertierung in DataFrame
